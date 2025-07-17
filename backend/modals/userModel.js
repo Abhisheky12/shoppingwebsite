@@ -1,6 +1,7 @@
 const mongoose=require("mongoose");
 const {Schema}=mongoose;
 const validate=require("validator");
+const bcrypt=require("bcrypt");
 
 
 const userSchema=new Schema({
@@ -39,6 +40,13 @@ const userSchema=new Schema({
     resetPasswordToken:String,
     resetPasswordExpire:Date
 },{timestamps:true})
+
+//verify password when login 
+userSchema.methods.verifyPassword=async function(enteredpassword){
+    return await bcrypt.compare(enteredpassword,this.password);
+}
+
+
 
 const User=mongoose.model("user",userSchema);
 module.exports={User};

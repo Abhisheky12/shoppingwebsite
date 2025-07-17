@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 
+
 //register
 const registerUser = async (req, res) => {
     try {
@@ -22,6 +23,7 @@ const registerUser = async (req, res) => {
         })
         //sending token to browser
         const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: "3d" });
+        res.cookie("token", token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 })
         return res.status(201).json({
             success: true,
             user,
@@ -70,27 +72,34 @@ const loginUser = async (req, res) => {
             throw new Error("Password cannot be empty");
         }
 
-        const user=await User.findOne({email}).select("+password");
-        if(!user){
+        const user = await User.findOne({ email }).select("+password");
+        if (!user) {
             throw new Error("User not exist.Please enter valid email");
         }
-        
+
+        // const match=await bcrypt.compare(password,user.password);
+        const isPasswordValid = await user.verifyPassword(password);
+        if (!isPasswordValid) {
+            throw new Error("Please enter valid email or password");
+        }
+
         //send jwt token to the user
-         const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: "3d" });
+        const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, { expiresIn: "3d" });
+        res.cookie("token", token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 })
 
 
-         return res.status(200).json({
-            success:true,
+        return res.status(200).json({
+            success: true,
             user,
             token
-         })
+        })
 
 
     } catch (error) {
 
         return res.status(404).json({
-            success:false,
-            message:error.message      
+            success: false,
+            message: error.message
         })
 
     }
@@ -99,4 +108,4 @@ const loginUser = async (req, res) => {
 }
 
 
-module.exports = { registerUser,loginUser };
+module.exports = { registerUser, loginUser };

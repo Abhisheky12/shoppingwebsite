@@ -26,7 +26,7 @@ app.use(
 
 //middleware
 
-app.use(cookieParser());
+app.use(cookieParser());  // parse cookies from the incoming HTTP requests, and make them easily accessible via req.cookies.
 app.use(express.json()); // Parses incoming JSON request bodies and makes them available as req.body.
 
 
