@@ -5,7 +5,7 @@ const {createProducts,getAllProducts,updateProduct,deleteProduct,getsingleProduc
 //create product
 produtRouter.post("/createproduct",createProducts);
 //getall product
-produtRouter.get("/getproduct",getAllProducts);
+produtRouter.get("/getproducts",getAllProducts);
 //updatep roduct
 produtRouter.put("/updateproduct/:id",updateProduct);
 //delete product

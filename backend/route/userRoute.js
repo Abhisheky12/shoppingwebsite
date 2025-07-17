@@ -1,11 +1,13 @@
 const express=require("express");
 const authRouter=express.Router();
-const {register}=require("../controller/userController");
+const {registerUser,loginUser}=require("../controller/userController");
 
 
 
 //register
-authRouter.post("/register",register);
+authRouter.post("/register",registerUser);
+//login
+authRouter.post("/login",loginUser);
 
 
 

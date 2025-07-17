@@ -5,13 +5,13 @@ const { APIFunctionality } = require("../utils/apiFunctionality");
 const createProducts = async (req, res) => {
     try {
         const product = await Product.create(req.body);
-        res.status(201).json({
+        return res.status(201).json({
             success: true,
             product
         });
     }
     catch (error) {
-        res.status(404).json({
+        return res.status(404).json({
             success: false,
             message: error.message
         })
@@ -22,7 +22,7 @@ const createProducts = async (req, res) => {
 const getAllProducts = async (req, res) => {
     try {
 
-       //search
+        //search
         const { name, category, sort } = req.query;
         const queryObject = {};
 
@@ -50,34 +50,64 @@ const getAllProducts = async (req, res) => {
             sortOption.createdAt = 1;
         }
 
+
+        //   Count total documents in collect (filtered or not)
+        const productCount = await Product.countDocuments(queryObject);
+
         let productsQuery = Product.find(queryObject);
         //  Apply sorting only if sortOption is not empty
         if (Object.keys(sortOption).length > 0) {
             productsQuery = productsQuery.sort(sortOption);
         }
 
-        
-         //pagination
-         const page=Number(req.query.page)||1;
-         const limit=Number(req.query.limit)||2;
 
-         const skip=(page-1)*limit;
+        //pagination
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 2;
 
-         productsQuery=productsQuery.skip(skip).limit(limit);
+        const skip = (page - 1) * limit;
+
+        productsQuery = productsQuery.skip(skip).limit(limit);
 
 
 
-         const products = await productsQuery;
+        const products = await productsQuery;
 
-       
+        //totalpages
+        const totalPages = Math.ceil(productCount / limit);
+        //error if page acceesing number  >totalpages 
+        if (page > totalPages && productCount > 0) {
+            return res.status(404).json({
+                success: false,
+                message: "This page doesnot exist"
+            })
+        }
+        //no products found (optional)
+        if (productCount == 0) {
+            return res.status(200).json(
+                {
+                    success: true,
+                    message: "No product found",
+                    products: [],
+                    productCount: 0,
+                    totalPages: 0,
+                    currentPage:page
+                }
+            )
+
+        }
+        // send actual data
         res.status(200).json({
             success: true,
-            products
+            products,
+            productCount,
+            totalPages,
+            currentPage:page
         })
 
     }
     catch (error) {
-        res.status(404).json({
+        return res.status(404).json({
             success: false,
             message: error.message
         })
@@ -102,7 +132,7 @@ const updateProduct = async (req, res) => {
         }
 
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             product
         })
@@ -111,7 +141,7 @@ const updateProduct = async (req, res) => {
     }
     catch (error) {
 
-        res.status(404).json({
+        return res.status(404).json({
             success: false,
             message: "some error occured"
         })
@@ -135,7 +165,7 @@ const deleteProduct = async (req, res) => {
 
         const deleted = await Product.findByIdAndDelete(id);
 
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: "product deleted successfully"
         })
@@ -163,14 +193,14 @@ const getsingleProduct = async (req, res) => {
                 message: "Product not found"
             })
         }
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             product
         })
 
     } catch (error) {
 
-        res.status(404).json({
+        return res.status(404).json({
             success: false,
             message: "some error occured"
         })

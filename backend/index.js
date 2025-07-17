@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(express.json()); // Parses incoming JSON request bodies and makes them available as req.body.
 
 
-// app.use("/user",authRouter);
+app.use("/user",authRouter);
 app.use("/product",produtRouter);
 
 
