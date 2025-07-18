@@ -1,11 +1,12 @@
 const express=require("express");
 const produtRouter=express.Router();
 const {createProducts,getAllProducts,updateProduct,deleteProduct,getsingleProduct} =require("../controller/productController");
+const {verifyUserAuth}=require("../middleware/userAuth");
 
 //create product
-produtRouter.post("/createproduct",createProducts);
+produtRouter.post("/createproduct",verifyUserAuth,createProducts);
 //getall product
-produtRouter.get("/getproducts",getAllProducts);
+produtRouter.get("/getproducts",verifyUserAuth,getAllProducts);
 //updatep roduct
 produtRouter.put("/updateproduct/:id",updateProduct);
 //delete product
