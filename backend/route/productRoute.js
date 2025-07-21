@@ -1,18 +1,18 @@
 const express=require("express");
-const produtRouter=express.Router();
+const productRouter=express.Router();
 const {createProducts,getAllProducts,updateProduct,deleteProduct,getsingleProduct} =require("../controller/productController");
-const {verifyUserAuth}=require("../middleware/userAuth");
+const {verifyUserAuth, roleBasedAccess}=require("../middleware/userAuth");
 
 //create product
-produtRouter.post("/createproduct",verifyUserAuth,createProducts);
+productRouter.post("/createproduct",verifyUserAuth,roleBasedAccess("admin"),createProducts);
 //getall product
-produtRouter.get("/getproducts",verifyUserAuth,getAllProducts);
+productRouter.get("/getproducts",verifyUserAuth,getAllProducts);
 //updatep roduct
-produtRouter.put("/updateproduct/:id",updateProduct);
+productRouter.put("/updateproduct/:id",verifyUserAuth,roleBasedAccess("admin"),updateProduct);
 //delete product
-produtRouter.delete("/deleteproduct/:id",deleteProduct);
+productRouter.delete("/deleteproduct/:id",verifyUserAuth,roleBasedAccess("admin"),deleteProduct);
 //getsingle product detail
-produtRouter.get("/getsingleproduct/:id",getsingleProduct);
+productRouter.get("/getsingleproduct/:id",verifyUserAuth,getsingleProduct);
 
 
-module.exports=produtRouter;
+module.exports=productRouter;

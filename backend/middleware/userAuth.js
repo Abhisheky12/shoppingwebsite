@@ -25,4 +25,18 @@ const verifyUserAuth=async(req,res,next)=>{
          }
          
 }
-module.exports={verifyUserAuth};
+
+const roleBasedAccess=(...roles)=>{
+
+   return(req,res,next)=>{
+      if(!roles.includes(req.user.role)){
+          return res.status(404).json({
+             success:false,
+             message:`${req.user.role} is not allowed to access the resource`
+          })
+      }
+      next();
+      }
+
+}
+module.exports={verifyUserAuth,roleBasedAccess};

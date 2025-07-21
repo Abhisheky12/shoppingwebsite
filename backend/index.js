@@ -8,7 +8,7 @@ const cors = require("cors");
 
 //importing route
 const authRouter=require("./route/userRoute");
-const produtRouter=require("./route/productRoute");
+const productRouter=require("./route/productRoute");
 
 
 
@@ -31,7 +31,7 @@ app.use(express.json()); // Parses incoming JSON request bodies and makes them a
 
 
 app.use("/user",authRouter);
-app.use("/product",produtRouter);
+app.use("/product",productRouter);
 
 
 
