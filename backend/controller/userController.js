@@ -106,6 +106,28 @@ const loginUser = async (req, res) => {
 
 
 }
+//logout
+const logout=async(req,res)=>{
+          
+         try {
+            
+            res.cookie("token",null,{maxAge:0,httpOnly:true});
+
+            return res.status(200).json({
+                status:false,
+                message:"Successfully logged out"
+            })
+
+         } catch (error) {
+            return res.status(404).json({
+                status:false,
+                message:"Problem during logout"
+            })
+         }
 
 
-module.exports = { registerUser, loginUser };
+
+}
+
+
+module.exports = { registerUser, loginUser,logout };
