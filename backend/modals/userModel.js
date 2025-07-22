@@ -2,6 +2,7 @@ const mongoose=require("mongoose");
 const {Schema}=mongoose;
 const validate=require("validator");
 const bcrypt=require("bcrypt");
+const crypto=require("crypto");
 
 
 const userSchema=new Schema({
