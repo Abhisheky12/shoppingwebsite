@@ -4,6 +4,8 @@ const { APIFunctionality } = require("../utils/apiFunctionality");
 //create product
 const createProducts = async (req, res) => {
     try {
+        //extracting user id to store in product body in user field as in productmodel
+        req.body.user=req.user._id;
         const product = await Product.create(req.body);
         return res.status(201).json({
             success: true,
