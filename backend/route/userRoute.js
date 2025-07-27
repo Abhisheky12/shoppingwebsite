@@ -1,7 +1,7 @@
 const express=require("express");
 const authRouter=express.Router();
-const {registerUser,loginUser,logout,resetPassword}=require("../controller/userController");
-
+const {registerUser,loginUser,logout,requestresetPassword,resetPassword,fetchProfile,updatePassword}=require("../controller/userController");
+const {verifyUserAuth}=require("../middleware/userAuth");
 
 //register
 authRouter.post("/register",registerUser);
@@ -9,8 +9,14 @@ authRouter.post("/register",registerUser);
 authRouter.post("/login",loginUser);
 //logout
 authRouter.post("/logout",logout);
+//requestresetpassword
+authRouter.post("/requestresetpassword",requestresetPassword);
 //resetpassword
-authRouter.post("/resetpassword",resetPassword);
+authRouter.post("/resetpassword/:resettoken",resetPassword);
+//getuserdetail
+authRouter.get("/fetchprofile",verifyUserAuth,fetchProfile);
+//updatepassword
+authRouter.post("/updatepassword",updatePassword);
 
 
 
