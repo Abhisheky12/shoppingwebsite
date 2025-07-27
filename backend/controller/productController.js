@@ -212,8 +212,22 @@ const getsingleProduct = async (req, res) => {
 
 }
 
+//Admin-Getting all products
+const getAdminProducts=async(req,res)=>{
+    const products=await Product.find({});
+    return res.status(200).json({
+        success:true,
+        message:"Fetched product successfully",
+        products
+    })
+}
 
-module.exports = { createProducts, getAllProducts, updateProduct, deleteProduct, getsingleProduct };
+//admin getting user information
+
+
+
+
+module.exports = { createProducts, getAllProducts, updateProduct, deleteProduct, getsingleProduct,getAdminProducts};
 
 
 

@@ -242,7 +242,7 @@ const fetchProfile = async (req, res) => {
 const updatePassword = async (req, res) => {
     try {
         const { oldpassword, newpassword, confirmNewPassword } = req.body;
-        const user = await User.findOne(req.user.id);
+        const user = await User.findById(req.user._id).select("+password");
 
         const verifypassword = await bcrypt.compare(oldpassword, user.password);
 
@@ -253,12 +253,18 @@ const updatePassword = async (req, res) => {
             })
         }
 
-        if (newpassword != confirmPassword) {
+        if (newpassword != confirmNewPassword) {
             return res.status(400).json({
                 success: false,
                 message: "Confirm password not matched"
             })
         }
+
+        user.password=await bcrypt.hash(newpassword,10);
+        
+        await user.save({validateBeforeSave:false});
+
+
 
          return res.status(200).json({
                 success:false,
@@ -270,11 +276,41 @@ const updatePassword = async (req, res) => {
     } catch (error) {
           return res.status(400).json({
                 success:false,
-                message:"Server Error"
+                message:error.message
             })
     }
 }
 
 
+//updateprofile
+const updateProfile=async(req,res)=>{
 
-module.exports = { registerUser, loginUser, logout, requestresetPassword, resetPassword, fetchProfile,updatePassword };
+    console.log(req.user);
+    
+       try {
+        
+         const {name,email}=req.body;
+         const updateUserDetails={
+            name,
+            email
+         }
+         const user=await User.findByIdAndUpdate(req.user._id,updateUserDetails,{new:true,runValidators:true});
+
+         res.status(200).json({
+            success:true,
+            message:"Profile Updated Successfully",
+            user
+         })
+        
+       } catch (error) {
+         res.status(404).json({
+            success:false,
+            message:error.message
+          
+         })
+       }
+
+}
+
+
+module.exports = { registerUser, loginUser, logout, requestresetPassword, resetPassword, fetchProfile,updatePassword,updateProfile };

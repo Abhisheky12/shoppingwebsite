@@ -11,7 +11,7 @@ const verifyUserAuth = async (req, res, next) => {
       }
       //verifying token
       const decodeData = jwt.verify(token, process.env.SECRET_KEY);
-      console.log(decodeData);
+      
 
       req.user = await User.findById(decodeData.id);
 
