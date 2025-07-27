@@ -2,6 +2,9 @@
 const { User } = require("../modals/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const { log } = require("console");
+const sendEmail=require("../utils/sendEmail");
 
 
 
@@ -107,27 +110,71 @@ const loginUser = async (req, res) => {
 
 }
 //logout
-const logout=async(req,res)=>{
-          
-         try {
-            
-            res.cookie("token",null,{maxAge:0,httpOnly:true});
+const logout = async (req, res) => {
 
-            return res.status(200).json({
-                status:false,
-                message:"Successfully logged out"
-            })
+    try {
 
-         } catch (error) {
-            return res.status(404).json({
-                status:false,
-                message:"Problem during logout"
-            })
-         }
+        res.cookie("token", null, { maxAge: 0, httpOnly: true });
 
+        return res.status(200).json({
+            status: false,
+            message: "Successfully logged out"
+        })
+
+    } catch (error) {
+        return res.status(404).json({
+            status: false,
+            message: "Problem during logout"
+        })
+    }
+
+
+
+}
+//resetpassword
+const resetPassword = async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.body.email });
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        //  Generate reset token
+        const resetToken = crypto.randomBytes(20).toString("hex");
+
+        //  Hash token and set fields on user object (not saved to DB yet)
+        const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+        user.resetPasswordToken = hashedToken;
+        user.resetPasswordExpire = Date.now() + 5 * 60 * 1000; // expires in 15 minutes
+
+        // Save updated user to DB   or // can also use findbyId and update
+        await user.save({ validateBeforeSave: false });
+
+
+        const resetPasswordURL = `http://localhost/user/reset/${resetToken}`;
+        const message=`use the following link to reset your password :${resetPasswordURL}.\n\n This link will be exprired in 5 minutes.\n\n If you did not request a password reset, please igonore this message`;
+
+        //send email
+        await sendEmail({
+            email:user.email,
+            subject:"Password reset request",
+            message:message
+        })
+
+        res.status(200).json({
+            success: true,
+            message: "Reset token generated successfully",
+            resetToken, // this raw token will be sent via email normally
+        });
+
+
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Server error" });
+    }
 
 
 }
 
 
-module.exports = { registerUser, loginUser,logout };
+module.exports = { registerUser, loginUser, logout, resetPassword };
