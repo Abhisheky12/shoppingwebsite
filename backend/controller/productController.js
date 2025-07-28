@@ -285,13 +285,43 @@ const getAdminProducts = async (req, res) => {
         products
     })
 }
-//
+//Deleting review
+const deleteReview=async(req,res)=>{
+    const product=await Product.findById(req.query.productId);
+     if (!product) {
+        return res.status(404).json({
+            success: false,
+            message: "Product not found"
+        });
+    }
+    //filtering product
+    const reviews=product.reviews.filter(rev=>rev._id.toString()!==req.query.id.toString());
+
+    //after deleting review again calcualate no.of reviews remains
+
+    let avg=0;
+    reviews.forEach(rev=>
+        avg+=rev.rating
+    )
+    product.reviews=reviews;
+    product.ratings = reviews.length > 0 ? Number((avg / reviews.length).toFixed(1)) : 0;
+    product.numofReviews=reviews.length;
+
+    await product.save({ validateBeforeSave: false });
+
+    
+    res.status(200).json({
+        success: true,
+        message: "Review deleted successfully"
+    });
+    
+}
 
 
 module.exports = {
     createProducts, getAllProducts
     , updateProduct, deleteProduct, getsingleProduct
-    , getAdminProducts, createReviewForProduct, getProductReviews
+    , getAdminProducts, createReviewForProduct, getProductReviews,deleteReview
 };
 
 
