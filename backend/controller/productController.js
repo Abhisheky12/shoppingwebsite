@@ -5,7 +5,7 @@ const { APIFunctionality } = require("../utils/apiFunctionality");
 const createProducts = async (req, res) => {
     try {
         //extracting user id to store in product body in user field as in productmodel
-        req.body.user=req.user._id;
+        req.body.user = req.user._id;
         const product = await Product.create(req.body);
         return res.status(201).json({
             success: true,
@@ -93,7 +93,7 @@ const getAllProducts = async (req, res) => {
                     products: [],
                     productCount: 0,
                     totalPages: 0,
-                    currentPage:page
+                    currentPage: page
                 }
             )
 
@@ -104,7 +104,7 @@ const getAllProducts = async (req, res) => {
             products,
             productCount,
             totalPages,
-            currentPage:page
+            currentPage: page
         })
 
     }
@@ -211,60 +211,88 @@ const getsingleProduct = async (req, res) => {
     }
 
 }
+//creating and updating review
+const createReviewForProduct = async (req, res) => {
+    const { rating, comment, productId } = req.body;
+    const curruntreview = {
+        user: req.user._id,
+        name: req.user.name,
+        rating: Number(rating),
+        comment
+    }
+    const product = await Product.findById(productId);
 
+    if (!product) {
+        return res.status(404).json({
+            success: false,
+            message: "Product not found"
+        });
+    }
+    const reviewExists = product.reviews.find(rev => rev.user.toString() === req.user._id.toString());
+
+    if (reviewExists) {
+        reviewExists.comment = comment;
+        reviewExists.rating = rating;
+
+    }
+    else {
+        product.reviews.push(curruntreview);
+        product.numofReviews = product.reviews.length;
+    }
+
+
+    let avg = 0;
+    product.reviews.forEach(review => {
+        avg += review.rating
+    })
+
+
+    product.ratings = product.reviews.length > 0 ? Number((avg / product.reviews.length).toFixed(1)) : 0;
+
+
+    await product.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+        success: true,
+        message: "Review Submitted Successfully",
+        product
+    })
+
+}
+//getting user review
+const getProductReviews = async (req, res) => {
+    const id = req.query.id;
+    const product = await Product.findById(id);
+    if (!product) {
+        return res.status(404).json({
+            success: false,
+            message: "Product not found"
+        });
+    }
+
+     return res.status(200).json({
+            success: true,
+            reviews:product.reviews   
+        });
+
+}
 //Admin-Getting all products
-const getAdminProducts=async(req,res)=>{
-    const products=await Product.find();
+const getAdminProducts = async (req, res) => {
+    const products = await Product.find();
     return res.status(200).json({
-        success:true,
-        message:"Fetched product successfully",
+        success: true,
+        message: "Fetched product successfully",
         products
     })
 }
-//creating and updating review
-const createReviewForProduct=async(req,res)=>{
-    const{rating,comment,productId}=req.body;
-    const curruntreview={
-        user:req.user._id,
-        name:req.user.name,
-        rating:Number(rating),
-        comment
-    }
-    const product=await Product.findById(productId);
-   
-    if (!product) {
-    return res.status(404).json({
-        success: false,
-        message: "Product not found"
-    });
-}
-    const reviewExists=product.reviews.find(rev=>rev.user.toString()===req.user._id.toString());
-
-    if(reviewExists){
-         reviewExists.comment=comment;
-         reviewExists.rating=rating;
-
-    }
-    else{
-        product.reviews.push(curruntreview);
-        product.
-    }
-    await product.save({validateBeforeSave:false});
-    
-    res.status(200).json({
-        success:true,
-        message:"Review Submitted Successfully",
-        product
-    })
-                        
-}
+//
 
 
-
-
-module.exports = { createProducts, getAllProducts
+module.exports = {
+    createProducts, getAllProducts
     , updateProduct, deleteProduct, getsingleProduct
-    ,getAdminProducts,createReviewForProduct};
+    , getAdminProducts, createReviewForProduct, getProductReviews
+};
 
 
 
