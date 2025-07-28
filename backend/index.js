@@ -9,6 +9,7 @@ const cors = require("cors");
 //importing route
 const authRouter=require("./route/userRoute");
 const productRouter=require("./route/productRoute");
+const orderRouter=require("./route/orderRoute");
 
 
 
@@ -32,6 +33,7 @@ app.use(express.json()); // Parses incoming JSON request bodies and makes them a
 
 app.use("/user",authRouter);
 app.use("/product",productRouter);
+app.use("/userorder",orderRouter);
 
 
 

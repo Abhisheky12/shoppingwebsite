@@ -218,7 +218,7 @@ const createReviewForProduct = async (req, res) => {
         user: req.user._id,
         name: req.user.name,
         rating: Number(rating),
-        comment
+        comment:comment
     }
     const product = await Product.findById(productId);
 
@@ -276,15 +276,6 @@ const getProductReviews = async (req, res) => {
         });
 
 }
-//Admin-Getting all products
-const getAdminProducts = async (req, res) => {
-    const products = await Product.find();
-    return res.status(200).json({
-        success: true,
-        message: "Fetched product successfully",
-        products
-    })
-}
 //Deleting review
 const deleteReview=async(req,res)=>{
     const product=await Product.findById(req.query.productId);
@@ -305,7 +296,7 @@ const deleteReview=async(req,res)=>{
     )
     product.reviews=reviews;
     product.ratings = reviews.length > 0 ? Number((avg / reviews.length).toFixed(1)) : 0;
-    product.numofReviews=reviews.length;
+    product.numofReviews=reviews.length;  
 
     await product.save({ validateBeforeSave: false });
 
@@ -316,7 +307,15 @@ const deleteReview=async(req,res)=>{
     });
     
 }
-
+//Admin-Getting all products
+const getAdminProducts = async (req, res) => {
+    const products = await Product.find();
+    return res.status(200).json({
+        success: true,
+        message: "Fetched product successfully",
+        products
+    })
+}
 
 module.exports = {
     createProducts, getAllProducts
