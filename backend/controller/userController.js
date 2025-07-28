@@ -260,57 +260,139 @@ const updatePassword = async (req, res) => {
             })
         }
 
-        user.password=await bcrypt.hash(newpassword,10);
-        
-        await user.save({validateBeforeSave:false});
+        user.password = await bcrypt.hash(newpassword, 10);
+
+        await user.save({ validateBeforeSave: false });
 
 
 
-         return res.status(200).json({
-                success:false,
-                message:"Password updated successfully"
-            })
+        return res.status(200).json({
+            success: false,
+            message: "Password updated successfully"
+        })
 
 
 
     } catch (error) {
-          return res.status(400).json({
-                success:false,
-                message:error.message
-            })
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        })
     }
 }
 
 
 //updateprofile
-const updateProfile=async(req,res)=>{
+const updateProfile = async (req, res) => {
 
     console.log(req.user);
-    
-       try {
-        
-         const {name,email}=req.body;
-         const updateUserDetails={
+
+    try {
+
+        const { name, email } = req.body;
+        const updateUserDetails = {
             name,
             email
-         }
-         const user=await User.findByIdAndUpdate(req.user._id,updateUserDetails,{new:true,runValidators:true});
+        }
+        const user = await User.findByIdAndUpdate(req.user._id, updateUserDetails, { new: true, runValidators: true });
 
-         res.status(200).json({
-            success:true,
-            message:"Profile Updated Successfully",
+        res.status(200).json({
+            success: true,
+            message: "Profile Updated Successfully",
             user
-         })
-        
-       } catch (error) {
-         res.status(404).json({
-            success:false,
-            message:error.message
-          
-         })
-       }
+        })
 
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: error.message
+
+        })
+    }
+
+}
+//admin getting user information
+const getUsersList = async (req, res) => {
+    const users = await User.find();
+    res.status(200).json({
+        success: true,
+        message: "Fetched all users successfully",
+        users
+    })
+}
+//admin getting single user information
+const getSingleUser = async (req, res) => {
+    try {
+
+        const id = req.params.id;
+
+        const user = await User.findById(id);
+
+        if (!user) {
+            res.status(404).json({
+                success: false,
+                messaage: "User not found"
+            })
+        }
+        res.status(200).json({
+            success: true,
+            message: "Fetched user successfully",
+            user
+        })
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            messaage: "some error occured"
+        })
+    }
+}
+
+//Admin chaging user role
+const updateUserRole = async (req, res) => {
+    const id = req.params.id;
+    const { role } = req.body;
+    const newUserData = {
+        role
+    }
+    const user = await User.findByIdAndUpdate(id, newUserData, {
+        new: true,
+        runValidators: true
+    })
+
+    if (!user) {
+        res.status(400).json({
+            success: true,
+            message: "User does not exist "
+        })
+    }
+
+    res.status(200).json({
+        success: true,
+        message: "User role updated successfully",
+        user
+    })
+}
+//Admin delete the user
+const deleteUser = async (req, res) => {
+    const id = req.params.id;
+    const user = await User.findByIdAndDelete(id);
+    if(!user){
+         res.status(404).json({
+        success: true,
+        messaage: "User does not exist"
+    })
+    }
+
+    res.status(200).json({
+        success: true,
+        messaage: "Successfully deleted the user"
+    })
 }
 
 
-module.exports = { registerUser, loginUser, logout, requestresetPassword, resetPassword, fetchProfile,updatePassword,updateProfile };
+module.exports = {
+    registerUser, loginUser,
+    logout, requestresetPassword, resetPassword,
+    fetchProfile, updatePassword, updateProfile,
+    getUsersList, getSingleUser, updateUserRole,deleteUser
+};

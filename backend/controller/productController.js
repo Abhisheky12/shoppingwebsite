@@ -214,20 +214,57 @@ const getsingleProduct = async (req, res) => {
 
 //Admin-Getting all products
 const getAdminProducts=async(req,res)=>{
-    const products=await Product.find({});
+    const products=await Product.find();
     return res.status(200).json({
         success:true,
         message:"Fetched product successfully",
         products
     })
 }
+//creating and updating review
+const createReviewForProduct=async(req,res)=>{
+    const{rating,comment,productId}=req.body;
+    const curruntreview={
+        user:req.user._id,
+        name:req.user.name,
+        rating:Number(rating),
+        comment
+    }
+    const product=await Product.findById(productId);
+   
+    if (!product) {
+    return res.status(404).json({
+        success: false,
+        message: "Product not found"
+    });
+}
+    const reviewExists=product.reviews.find(rev=>rev.user.toString()===req.user._id.toString());
 
-//admin getting user information
+    if(reviewExists){
+         reviewExists.comment=comment;
+         reviewExists.rating=rating;
+
+    }
+    else{
+        product.reviews.push(curruntreview);
+        product.
+    }
+    await product.save({validateBeforeSave:false});
+    
+    res.status(200).json({
+        success:true,
+        message:"Review Submitted Successfully",
+        product
+    })
+                        
+}
 
 
 
 
-module.exports = { createProducts, getAllProducts, updateProduct, deleteProduct, getsingleProduct,getAdminProducts};
+module.exports = { createProducts, getAllProducts
+    , updateProduct, deleteProduct, getsingleProduct
+    ,getAdminProducts,createReviewForProduct};
 
 
 

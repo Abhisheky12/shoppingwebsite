@@ -1,6 +1,6 @@
 const express=require("express");
 const productRouter=express.Router();
-const {createProducts,getAllProducts,updateProduct,deleteProduct,getsingleProduct,getAdminProducts} =require("../controller/productController");
+const {createProducts,getAllProducts,updateProduct,deleteProduct,getsingleProduct,getAdminProducts, createReviewForProduct} =require("../controller/productController");
 const {verifyUserAuth, roleBasedAccess}=require("../middleware/userAuth");
 
 //create product
@@ -13,7 +13,9 @@ productRouter.put("/admin/updateproduct/:id",verifyUserAuth,roleBasedAccess("adm
 productRouter.delete("/admin/deleteproduct/:id",verifyUserAuth,roleBasedAccess("admin"),deleteProduct);
 //getsingle product detail
 productRouter.get("/getsingleproduct/:id",getsingleProduct);
-//admin get all product
+//Admin get all product
 productRouter.get("/admin/getallproduct",getAdminProducts);
+//creating and updating review
+productRouter.put("/review",verifyUserAuth,createReviewForProduct);
 
 module.exports=productRouter;

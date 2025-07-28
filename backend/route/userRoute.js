@@ -1,7 +1,9 @@
 const express=require("express");
 const authRouter=express.Router();
-const {registerUser,loginUser,logout,requestresetPassword,resetPassword,fetchProfile,updatePassword,updateProfile}=require("../controller/userController");
-const {verifyUserAuth}=require("../middleware/userAuth");
+const {registerUser,loginUser,logout,requestresetPassword,
+    resetPassword,fetchProfile,updatePassword,
+    updateProfile,getUsersList,getSingleUser,updateUserRole,deleteUser}=require("../controller/userController");
+const {verifyUserAuth, roleBasedAccess}=require("../middleware/userAuth");
 
 //register
 authRouter.post("/register",registerUser);
@@ -19,7 +21,12 @@ authRouter.get("/fetchprofile",verifyUserAuth,fetchProfile);
 authRouter.post("/updatepassword",verifyUserAuth,updatePassword);
 //updateProfile
 authRouter.post("/updateprofile",verifyUserAuth,updateProfile);
-
-
-
+// admin getting users
+authRouter.get("/admin/getallusers",verifyUserAuth,roleBasedAccess("admin"),getUsersList);
+//admin getting single user
+authRouter.get("/admin/user/:id",verifyUserAuth,roleBasedAccess("admin"),getSingleUser);
+//admin changing user role
+authRouter.put("/admin/user/:id",verifyUserAuth,roleBasedAccess("admin"),updateUserRole);
+//admin deleting the sue
+authRouter.delete("/admin/user/:id",verifyUserAuth,roleBasedAccess("admin"),deleteUser);
 module.exports=authRouter;
