@@ -53,6 +53,11 @@ const orderSchema=new Schema({
             }
           }
     ],
+    orderStatus:{
+        type:String,
+        required:true,
+        default:"Processing"
+    },
     user:{
         type:mongoose.Schema.ObjectId,
         ref:"user",
@@ -87,7 +92,7 @@ const orderSchema=new Schema({
         required:true,
         default:0
     },
-    totalprice:{
+    totalPrice:{
         type:Number,
         required:true,
         default:0
