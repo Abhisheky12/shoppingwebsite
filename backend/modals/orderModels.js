@@ -1,8 +1,5 @@
 const mongoose=require("mongoose");
-const { User } = require("./userModel");
 const {Schema}=mongoose;
-
-
 
 
 
@@ -58,7 +55,7 @@ const orderSchema=new Schema({
     ],
     user:{
         type:mongoose.Schema.ObjectId,
-        ref:User,
+        ref:"user",
         required:true
     },
     paymentInfo:{
