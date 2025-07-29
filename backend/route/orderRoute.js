@@ -1,6 +1,6 @@
 const express=require("express");
 const orderRouter=express.Router();
-const {createNewOrder,getSingleOrder,allMyOrders, getAllOrders}=require("../controller/orderController");
+const {createNewOrder,getSingleOrder,allMyOrders, getAllOrders,updateOrderStatus, deleteOrder}=require("../controller/orderController");
 const {verifyUserAuth, roleBasedAccess}=require("../middleware/userAuth");
 
 
@@ -12,6 +12,10 @@ orderRouter.get("/admin/order/:id",verifyUserAuth,roleBasedAccess("admin"),getSi
 orderRouter.get("/orders/user",verifyUserAuth,allMyOrders);
 //All orders(admin can see all orders)
 orderRouter.get("/admin/orders",verifyUserAuth,roleBasedAccess("admin"),getAllOrders);
+//update order status(admin)
+orderRouter.put("/admin/order/:id",verifyUserAuth,roleBasedAccess("admin"),updateOrderStatus);
+//delete the order
+orderRouter.delete("/admin/order/:id",verifyUserAuth,roleBasedAccess("admin"),deleteOrder);
 
 
 module.exports=orderRouter;

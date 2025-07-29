@@ -53,16 +53,16 @@ const allMyOrders = async (req, res) => {
 }
 
 //All orders(admin)
-const getAllOrders=async(req,res)=>{
+const getAllOrders = async (req, res) => {
 
-    const orders=await Order.find();
-    let totalAmount=0;
-    orders.forEach(order=>{
-        totalAmount+=order.totalPrice;
+    const orders = await Order.find();
+    let totalAmount = 0;
+    orders.forEach(order => {
+        totalAmount += order.totalPrice;
     })
 
 
-     if (!orders) {
+    if (!orders) {
         res.status(404).json({
             success: false,
             message: "No order found"
@@ -70,27 +70,86 @@ const getAllOrders=async(req,res)=>{
     }
 
     res.status(200).json({
-          success:true,
-          orders,
-          totalAmount
+        success: true,
+        orders,
+        totalAmount
     })
 }
 
 //update order status
-const updateOrderStatus=async(req,res)=>{
-       const order=await Order.findById(req.params.id);
-       if (!order) {
+const updateOrderStatus = async (req, res) => {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+        return res.status(404).json({
+            success: false,
+            message: "No order found"
+        })
+    }
+    if (order.orderStatus === "Delivered") {
+        return res.status(200).json({
+            success: true,
+            message: "The order is already delivered"
+        })
+    }
+    //This runs all updateQuantity() calls in parallel, and waits for all to finish before moving on.
+    await Promise.all(order.orderItems.map(item => updateQuantity(item.product, item.quantity)
+    ))
+
+
+    order.orderStatus = req.body.status;
+    if (order.orderStatus === "Delivered") {
+        order.deliveredAt = Date.now();
+    }
+    await order.save({ validateBeforeSave: false });
+
+    return res.status(200).json({
+        success: true,
+        order
+    })
+
+}
+//function for updating quantiy of product
+async function updateQuantity(id, quantity) {
+    const product = await Product.findById(id);
+    if (!product) {
+        return res.status(404).json({
+            success: false,
+            message: "No product found"
+        })
+    }
+    product.stock = product.stock - quantity;
+
+
+}
+
+
+//deleteing order
+const deleteOrder = async (req, res) => {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
         res.status(404).json({
             success: false,
             message: "No order found"
         })
     }
-    if(order.orderStatus==="Delivered"){
-        res.status(404).json({
+
+    if (order.orderStatus !== "Delivered") {
+
+        res.status(200).json({
             success: true,
-            message: "The order is already delivered"
+            message: "This ordfer is under Processing and cannot deleted"
         })
+
     }
+
+    await Order.deleteOne({ _id: req.params.id });
+
+    res.status(404).json({
+        success: true,
+        message: "Order deleted successfully"
+    })
+
 }
 
-module.exports = { createNewOrder, getSingleOrder,allMyOrders,getAllOrders};
+
+module.exports = { createNewOrder, getSingleOrder, allMyOrders, getAllOrders, updateOrderStatus, deleteOrder };
