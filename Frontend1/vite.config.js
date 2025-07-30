@@ -4,4 +4,11 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server:{
+    proxy:{
+      '/user': 'http://localhost:5000',
+      '/product': 'http://localhost:5000',
+      '/userorder': 'http://localhost:5000'
+    }
+  }
 })

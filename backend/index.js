@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const { main } = require("./config/db")
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
-const cors = require("cors");
+// const cors = require("cors");
 
 //importing route
 const authRouter=require("./route/userRoute");
@@ -14,14 +14,14 @@ const orderRouter=require("./route/orderRoute");
 
 
 //running frontend and backend on sameport
-app.use(
-    cors({
-        origin: "http://localhost:5173",
-        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization", "Cache-Control", "Expires", "Pragma"],
-        credentials: true,
-    })
-);
+// app.use(
+//     cors({
+//         origin: "http://localhost:5173",
+//         methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+//         allowedHeaders: ["Content-Type", "Authorization", "Cache-Control", "Expires", "Pragma"],
+//         credentials: true,
+//     })
+// );
 
 
 
