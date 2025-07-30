@@ -4,21 +4,34 @@ import Navbar from '../components/Navbar';
 import ImageSlider from '../components/ImageSlider';
 import Product from '../components/product';
 import PageTitle from '../components/PageTitle';
-import {useSelector , useDispatch } from "react-redux";
-import { getProduct } from '../features/products/productSlice';
-
+import { useSelector, useDispatch } from "react-redux";
+import { getProduct, removeErrors } from '../features/products/productSlice';
+import Loader from '../components/loader';
+import {toast} from "react-toastify";
 
 const Home = () => {
 
     const { loading, error, products, productCount } = useSelector((state) => state.product)
     const dispatch = useDispatch();
 
-        useEffect(()=>{
-            dispatch(getProduct())
-        },[dispatch])
+    //call api 
+    useEffect(() => {
+        dispatch(getProduct())
+    }, [dispatch])
 
+    //error dispatch
+     useEffect(() => {
+        if(error){
+            console.log("Error:", error);
+            toast.error(error.message);
+            dispatch(removeErrors());
+        }
+    }, [dispatch,error])
+    
+    
     return (
-        <>
+        loading ? <Loader /> : <>
+
             <PageTitle title="Home-Shopping website" />
             <Navbar />
             <ImageSlider />
@@ -36,6 +49,7 @@ const Home = () => {
             </div>
             <Footer />
         </>
+
     );
 };
 

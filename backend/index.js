@@ -31,9 +31,9 @@ app.use(cookieParser());  // parse cookies from the incoming HTTP requests, and 
 app.use(express.json()); // Parses incoming JSON request bodies and makes them available as req.body.
 
 
-app.use("/user",authRouter);
-app.use("/product",productRouter);
-app.use("/userorder",orderRouter);
+app.use("/api/v1",authRouter);
+app.use("/api/v1",productRouter);
+app.use("/api/v1",orderRouter);
 
 
 

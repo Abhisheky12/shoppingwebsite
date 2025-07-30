@@ -12,7 +12,7 @@ const Product = ({ product }) => {
 
     return (
         <Link
-            to={product._id}
+            to={`/product/${product._id}`}
             className="no-underline text-inherit block w-60 h-auto bg-gray-700 rounded-lg shadow-md overflow-hidden
                        transition-all duration-200 ease-in-out hover:scale-105 hover:shadow-xl"
         >
