@@ -13,12 +13,12 @@ const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
         //hash password
-        hashpassword = await bcrypt.hash(password, 7);
+        const  hashpassword = await bcrypt.hash(password, 7);
         //creting user
         const user = await User.create({
             name,
             email,
-            password: hashpassword,
+            password:hashpassword,
             avatar: {
                 public_id: "This is temp id ",
                 url: "This is temperory url"
