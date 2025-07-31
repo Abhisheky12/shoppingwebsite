@@ -2,16 +2,25 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 
 //get all product
-export const getProduct = createAsyncThunk("product/getProduct", async (payload, { rejectWithValue }) => {
+export const getProduct = createAsyncThunk("product/getProduct", async ({keyword,page=1,category}, { rejectWithValue }) => {
     try {
-        const link = "/api/v1/getproducts";
+        // const link = keyword?`/api/v1/getproducts?name=${encodeURIComponent(keyword)}&page=${page}`:`/api/v1/getproducts?page=${page}`;
+        let link="/api/v1/getproducts?page="+page;
+        if(category){
+            link+=`&category=${category}`;
+        }
+        if(keyword){
+            link+=`&name=${keyword}`;
+        }
         const { data } = await axios.get(link);
         return data;
+        console.log(data);
+        
 
 
     } catch (error) {
         //error.response?.data =object send by backed inside of catch block
-        return rejectWithValue(error.response?.data || "An error occured")
+        return rejectWithValue(error.response?.data?.message || "An error occured")
     }
 })
 //single product detail
@@ -37,7 +46,10 @@ const productSlice = createSlice({
         productCount: 0,
         loading: false,
         error: null,
-        product: null
+        product: null,
+        totalPages:0,
+        limit:0
+
     },
     reducers: {
         removeErrors: (state) => {
@@ -61,6 +73,7 @@ const productSlice = createSlice({
             .addCase(getProduct.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "Something went wrong";
+                state.products=[]
             })
 
         builder.

@@ -16,14 +16,14 @@ const Home = () => {
 
     //call api 
     useEffect(() => {
-        dispatch(getProduct())
+        dispatch(getProduct(""))
     }, [dispatch])
 
     //error dispatch
      useEffect(() => {
         if(error){
-            console.log("Error:", error);
-            toast.error(error.message);
+            
+            toast.error(error,{position:"top-center",autoClose:1000});
             dispatch(removeErrors());
         }
     }, [dispatch,error])

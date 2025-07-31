@@ -65,7 +65,7 @@ const getAllProducts = async (req, res) => {
 
         //pagination
         const page = Number(req.query.page) || 1;
-        const limit = Number(req.query.limit) || 5;
+        const limit = Number(req.query.limit) || 4;
 
         const skip = (page - 1) * limit;
 
@@ -93,7 +93,8 @@ const getAllProducts = async (req, res) => {
                     products: [],
                     productCount: 0,
                     totalPages: 0,
-                    currentPage: page
+                    currentPage: page,
+                    limit
                 }
             )
 
@@ -104,14 +105,15 @@ const getAllProducts = async (req, res) => {
             products,
             productCount,
             totalPages,
-            currentPage: page
+            currentPage: page,
+            limit
         })
 
     }
     catch (error) {
         return res.status(404).json({
             success: false,
-            message: error.message
+            message: "No product Found"
         })
     }
 }

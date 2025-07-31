@@ -1,48 +1,116 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PageTitle from '../components/PageTitle'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { useDispatch, useSelector } from 'react-redux'
 import Product from '../components/product'
 import { getProduct, removeErrors } from '../features/products/productSlice'
+import { toast } from 'react-toastify'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import Noproduct from '../components/Noproduct'
+import Pagination from '@mui/material/Pagination'
+
 
 const Products = () => {
-    const { loading, error, products } = useSelector();
+    const { loading, error, products, resultsPerPage, productCount } = useSelector((state) => state.product);
     const dispatch = useDispatch();
-    //call api 
-    useEffect(() => {
-        dispatch(getProduct())
-    }, [dispatch])
+    const location = useLocation();
+    const navigate = useNavigate();
+    //search
+    const searchParams = new URLSearchParams(location.search);
+    const keyword = searchParams.get("name");
+    //pagination
+    const pageFromURL = parseInt(searchParams.get("page"), 10) || 1;
+    const [currentPage, setCurrentPage] = useState(pageFromURL);
+    //category filter
+    const categories = ["LAPTOP", "MOBILE", "TV", "FRUITS", "GLASS"];
+    const category = searchParams.get("category");
 
-    //error dispatch
+
+    // call api
+    useEffect(() => {
+        dispatch(getProduct({ keyword, page: currentPage, category }))
+    }, [dispatch, keyword, currentPage, category])
+
+    // error dispatch
     useEffect(() => {
         if (error) {
-            console.log("Error:", error);
-            toast.error(error.message);
+            toast.error(error, { position: "top-center", autoClose: 1000 });
             dispatch(removeErrors());
         }
     }, [dispatch, error])
 
 
+
+    const handlePageChnage = (page) => {
+        if (page !== currentPage) {
+            setCurrentPage(page);
+        }
+        const newSearchParams = new URLSearchParams(location.search);
+
+        if (page === 1) {
+            newSearchParams.delete('page');
+        } else {
+            newSearchParams.set('page', page);
+        }
+        navigate(`/products?${newSearchParams.toString()}`);
+    }
+
+    //handle category
+     const handleCategoryClick=(category)=>{
+        const newSearchParams=new URLSearchParams(location.search);
+        newSearchParams.set("category",category);
+        // newSearchParams.delete("Page");
+        navigate(`/products?${newSearchParams.toString()}`)
+     }
+
+
+
+
+
+    if (loading) {
+        return (
+            <>
+                <PageTitle title="All Products" />
+                <Navbar />
+                <Footer />
+            </>
+        )
+    }
+
     return (
         <>
             <PageTitle title="All Products" />
             <Navbar />
-            <div className="products-layout">
-                <div className="filter-section">
-                    <h3 className="filter-heading">CATEGORIES</h3>
-                    {/* Render Categories */}
+            <div className="flex flex-col md:flex-row gap-5 px-5 mt-[100px]">
+                <div className="flex-shrink-0 w-full md:w-[250px] bg-[var(--text-light)] p-5 rounded-lg shadow-md">
+                    <h3 className="text-[var(--primary-dark)] mb-4 text-lg font-semibold tracking-wide uppercase">Categories</h3>
+
+                    <ul className="space-y-2">
+                        {categories.map((category) => (
+                            <li
+                                key={category}
+                                className="cursor-pointer text-gray-700 hover:bg-white hover:shadow-sm hover:pl-2 transition-all rounded px-2 py-1"
+                                onClick={()=>handleCategoryClick(category)}
+                            >
+                                {category.toUpperCase()}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
 
-                <div className="product-section">
-                    <div className="product-product-container">
-                        {products.map((product, index) => (
-                            <Product key={index} product={product} />
-                        ))}
-                    </div>
+
+                <div className="flex-1 flex flex-col gap-4">
+                    {
+                        products.length > 0 ? (<div className="flex flex-wrap gap-6 justify-center">
+                            {products.map((product, index) => (
+                                <Product key={index} product={product} />
+                            ))}
+                        </div>) : <Noproduct keyword={keyword} />
+                    }
+                    {/* <Pagination currentPage={currentPage} onPageChange={handlePageChnage} /> */}
                 </div>
             </div>
-
             <Footer />
         </>
     )
