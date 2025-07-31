@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify';
+import { register, removeErrors, removeSuccess } from '../features/user/userSlice';
 
 const Register = () => {
     const [user, setUser] = useState({
@@ -14,6 +16,11 @@ const Register = () => {
     // for Display image in the form
     const [avatarPreview, setAvatarpreview] = useState("./public/images/profile.jpeg");
     const { name, email, password } = user;
+
+    const { success, loading, error } = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+    const navigate=useNavigate();
+
 
 
     const registerDataChange = (e) => {
@@ -31,6 +38,8 @@ const Register = () => {
             setUser({ ...user, [e.target.name]: e.target.value })
         }
     }
+
+    //function for submitting form
     const registerSubmit = (e) => {
         e.preventDefault();
         if (!name || !email || !password) {
@@ -42,14 +51,31 @@ const Register = () => {
         myForm.set("email", email);
         myForm.set("password", name);
         myForm.set("avatar", avatar);
-        console.log(myForm.entries());
-        for(let pair of myForm.entries()){
-            console.log(pair);
-            
-        }
-        
+
+        //dispatching register function
+        dispatch(register(myForm));
 
     }
+
+    //error message
+    useEffect(() => {
+        if (error) {
+            toast.error(error, { position: "top-center", autoClose: 1000 });
+            dispatch(removeErrors());
+        }
+    }, [dispatch, error])
+
+    //success message 
+    useEffect(() => {
+        if (success) {
+            toast.error("Registration Successful", { position: "top-center", autoClose: 1000 });
+            dispatch(removeSuccess());
+            navigate("/login")
+        }
+    }, [dispatch, success])
+
+
+
 
     return (
         <div className="mx-auto flex items-center justify-center min-h-screen p-4">
