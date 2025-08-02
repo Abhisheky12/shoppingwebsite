@@ -3,8 +3,20 @@ const app = express();
 const mongoose = require("mongoose");
 const { main } = require("./config/db")
 require("dotenv").config();
-const cookieParser = require("cookie-parser");
 // const cors = require("cors");
+const cookieParser = require("cookie-parser");
+
+
+
+// setting cloudinary
+const cloudinary = require("cloudinary").v2;
+const fileUpload = require("express-fileupload");
+cloudinary.config({
+    cloud_name:process.env.CLOUDINARY_NAME,
+    api_key:process.env.API_KEY,
+    api_secret:process.env.API_SEC
+})
+
 
 //importing route
 const authRouter=require("./route/userRoute");
@@ -29,8 +41,10 @@ const orderRouter=require("./route/orderRoute");
 
 app.use(cookieParser());  // parse cookies from the incoming HTTP requests, and make them easily accessible via req.cookies.
 app.use(express.json()); // Parses incoming JSON request bodies and makes them available as req.body.
+app.use(fileUpload());
 
 
+//routes
 app.use("/api/v1",authRouter);
 app.use("/api/v1",productRouter);
 app.use("/api/v1",orderRouter);

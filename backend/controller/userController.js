@@ -5,13 +5,18 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const { log } = require("console");
 const sendEmail = require("../utils/sendEmail");
-
+const cloudinary = require("cloudinary").v2;
 
 
 //register
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password,avatar } = req.body;
+        const myCloud=await cloudinary.uploader.upload(avatar,{
+            folder:"avatars",
+            width:150,
+            crop:"scale"
+        })
         //hash password
         const  hashpassword = await bcrypt.hash(password, 7);
         //creting user

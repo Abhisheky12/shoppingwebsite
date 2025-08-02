@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import { register, removeErrors, removeSuccess } from '../features/user/userSlice';
 
+
+
 const Register = () => {
     const [user, setUser] = useState({
         name: "",
@@ -68,7 +70,7 @@ const Register = () => {
     //success message 
     useEffect(() => {
         if (success) {
-            toast.error("Registration Successful", { position: "top-center", autoClose: 1000 });
+            toast.success("Registration Successful", { position: "top-center", autoClose: 1000 });
             dispatch(removeSuccess());
             navigate("/login")
         }
@@ -153,7 +155,7 @@ const Register = () => {
                             type="submit"
                             className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
-                            Create Account
+                            {loading?"Creating... Account":"Create Account"}
                         </button>
                     </div>
 
