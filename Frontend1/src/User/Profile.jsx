@@ -34,13 +34,13 @@ function Profile() {
               
               {/* Safely access avatar URL */}
               <img 
-                src={user.avatar?.url ? user.avatar.url : "./images/Profile.jpeg"}
+                src={user.avatar?.url ? user.avatar.url :"/images/profile.jpeg"}
                 alt="User Profile" 
                 className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md my-4 mx-auto mb-6 block transition-transform duration-300 ease-in-out hover:scale-105" 
               />
               
               <Link 
-                to="/profile/update"
+                to="/updateprofile"
                 className="inline-block py-2 px-6 bg-blue-600 text-white rounded-full no-underline font-medium transition-all duration-300 ease-in-out shadow-lg hover:bg-blue-700 hover:-translate-y-0.5"
               >
                 Edit Profile

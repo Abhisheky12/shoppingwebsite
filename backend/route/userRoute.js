@@ -20,7 +20,7 @@ authRouter.get("/fetchprofile",verifyUserAuth,fetchProfile);
 //updatepassword
 authRouter.post("/updatepassword",verifyUserAuth,updatePassword);
 //updateProfile
-authRouter.post("/updateprofile",verifyUserAuth,updateProfile);
+authRouter.put("/updateprofile",verifyUserAuth,updateProfile);
 // admin getting users
 authRouter.get("/admin/getallusers",verifyUserAuth,roleBasedAccess("admin"),getUsersList);
 //admin getting single user

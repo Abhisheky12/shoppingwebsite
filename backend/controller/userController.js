@@ -11,23 +11,23 @@ const cloudinary = require("cloudinary").v2;
 //register
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password,avatar } = req.body;
-        
-        const myCloud=await cloudinary.uploader.upload(avatar,{
-            folder:"avatars",
-            width:150,
-            crop:"scale"
+        const { name, email, password, avatar } = req.body;
+
+        const myCloud = await cloudinary.uploader.upload(avatar, {
+            folder: "avatars",
+            width: 150,
+            crop: "scale"
         })
         //hash password
-        const  hashpassword = await bcrypt.hash(password, 7);
+        const hashpassword = await bcrypt.hash(password, 7);
         //creting user
         const user = await User.create({
             name,
             email,
-            password:hashpassword,
+            password: hashpassword,
             avatar: {
-                public_id:myCloud.public_id,
-                url:myCloud.secure_url
+                public_id: myCloud.public_id,
+                url: myCloud.secure_url
             }
         })
         //sending token to browser
@@ -291,15 +291,53 @@ const updatePassword = async (req, res) => {
 //updateprofile
 const updateProfile = async (req, res) => {
 
-    console.log(req.user);
 
     try {
 
-        const { name, email } = req.body;
+        const { name, email, avatar } = req.body;
         const updateUserDetails = {
             name,
             email
         }
+
+         //  Handle Cloudinary upload ONLY if a new avatar was submitted
+        if (avatar) {
+            const currentUser = await User.findById(req.user._id);
+
+            // Destroy the old image if it exists
+            if (currentUser.avatar && currentUser.avatar.public_id) {
+                const imageId = currentUser.avatar.public_id;
+                await cloudinary.uploader.destroy(imageId);
+            }
+
+            // Upload the new image
+            const myCloud = await cloudinary.uploader.upload(avatar, {
+                folder: "avatars",
+                width: 150,
+                crop: "scale",
+            });
+
+            // Add the new avatar details to the update object
+            updateUserDetails.avatar = {
+                public_id: myCloud.public_id,
+                url: myCloud.secure_url,
+            };
+        }
+
+
+        //  Check if email is changing
+        if (email) {
+            const existingUser = await User.findOne({ email });
+
+            //  If found user with same email but it's not the current user
+            if (existingUser && existingUser._id.toString() !== req.user._id.toString()) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Email is already registered",
+                });
+            }
+        }
+
         const user = await User.findByIdAndUpdate(req.user._id, updateUserDetails, { new: true, runValidators: true });
 
         res.status(200).json({
@@ -311,7 +349,7 @@ const updateProfile = async (req, res) => {
     } catch (error) {
         res.status(404).json({
             success: false,
-            message: error.message
+            message: "Failed to update profile"
 
         })
     }
@@ -382,11 +420,11 @@ const updateUserRole = async (req, res) => {
 const deleteUser = async (req, res) => {
     const id = req.params.id;
     const user = await User.findByIdAndDelete(id);
-    if(!user){
-         res.status(404).json({
-        success: true,
-        messaage: "User does not exist"
-    })
+    if (!user) {
+        res.status(404).json({
+            success: true,
+            messaage: "User does not exist"
+        })
     }
 
     res.status(200).json({
@@ -400,5 +438,5 @@ module.exports = {
     registerUser, loginUser,
     logout, requestresetPassword, resetPassword,
     fetchProfile, updatePassword, updateProfile,
-    getUsersList, getSingleUser, updateUserRole,deleteUser
+    getUsersList, getSingleUser, updateUserRole, deleteUser
 };
