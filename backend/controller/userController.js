@@ -12,6 +12,7 @@ const cloudinary = require("cloudinary").v2;
 const registerUser = async (req, res) => {
     try {
         const { name, email, password,avatar } = req.body;
+        
         const myCloud=await cloudinary.uploader.upload(avatar,{
             folder:"avatars",
             width:150,
@@ -25,8 +26,8 @@ const registerUser = async (req, res) => {
             email,
             password:hashpassword,
             avatar: {
-                public_id: "This is temp id ",
-                url: "This is temperory url"
+                public_id:myCloud.public_id,
+                url:myCloud.secure_url
             }
         })
         //sending token to browser
@@ -122,14 +123,14 @@ const logout = async (req, res) => {
         res.cookie("token", null, { maxAge: 0, httpOnly: true });
 
         return res.status(200).json({
-            status: false,
+            success: true,
             message: "Successfully logged out"
         })
 
     } catch (error) {
         return res.status(404).json({
-            status: false,
-            message: "Problem during logout"
+            success: false,
+            message: "Problem occures during logout"
         })
     }
 

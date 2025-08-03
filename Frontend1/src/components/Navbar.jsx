@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { Close, Menu, PersonAdd, Search, ShoppingCart } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
+import UserDashboard from '../User/userDashboard';
+import { loadUser } from '../features/user/userSlice';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchQuery,setSearchQuesry]=useState("");
     const navigate=useNavigate();
-    const isAuthenticated = false;
+    const dispatch=useDispatch();
+    const {user,isAuthenticated}=useSelector((state)=>state.user);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -70,12 +74,15 @@ const Navbar = () => {
                         <span className='absolute -top-2 -right-2 bg-blue-500 text-white text-xs font-semibold min-w-[20px] h-5 rounded-full flex items-center justify-center px-1'>0</span>
                     </Link>
 
-                    {/* Register */}
-                    {!isAuthenticated && (
+                   {/* === USER PROFILE OR REGISTER ICON === */}
+                    {isAuthenticated ? (
+                        <UserDashboard user={user}/>
+                    ) : (
                         <Link to="/register" className='text-gray-200 hover:text-blue-400'>
                             <PersonAdd className='text-2xl' />
                         </Link>
                     )}
+
 
                     {/* Hamburger */}
                     <div className="md:hidden cursor-pointer ml-2" onClick={toggleMenu}>

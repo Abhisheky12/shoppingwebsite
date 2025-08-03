@@ -35,8 +35,8 @@ function Login() {
         useEffect(() => {
             if (success) {
                 toast.success("Login Successful", { position: "top-center", autoClose: 1000 });
-                // dispatch(removeSuccess());
-                // navigate("/login")
+                dispatch(removeSuccess());
+             
             }
         }, [dispatch, success])
         //redirect to login
