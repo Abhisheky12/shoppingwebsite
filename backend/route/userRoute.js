@@ -14,11 +14,11 @@ authRouter.post("/logout",logout);
 //requestresetpassword
 authRouter.post("/requestresetpassword",requestresetPassword);
 //resetpassword
-authRouter.post("/resetpassword/:resettoken",resetPassword);
+authRouter.post("/reset/:token",resetPassword);
 //getuserdetail
 authRouter.get("/fetchprofile",verifyUserAuth,fetchProfile);
 //updatepassword
-authRouter.post("/updatepassword",verifyUserAuth,updatePassword);
+authRouter.put("/updatepassword",verifyUserAuth,updatePassword);
 //updateProfile
 authRouter.put("/updateprofile",verifyUserAuth,updateProfile);
 // admin getting users

@@ -1,5 +1,5 @@
 // Converted Tailwind version of your ProductDetails component
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PageTitle from '../components/PageTitle';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -8,24 +8,31 @@ import Loader from '../components/loader';
 import { getProductDetails, removeErrors } from '../features/products/productSlice';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { addItemsToCart, removeMessage } from '../features/cart/cartSlice';
 
 const ProductDetails = () => {
 
     const { product, error, loading } = useSelector((state) => state.product);
+    const { loading: cartLoading, error: cartError, success, message, cartItems } = useSelector((state) => state.cart);
     const dispatch = useDispatch();
+    const [quantity, setQuantity] = useState(1);
     const { id } = useParams();
-
+ 
+    console.log(cartItems);
+    
     //get api
     useEffect(() => {
         if (id) {
-            console.log("hello");
-
             dispatch(getProductDetails(id));
         }
         else {
             dispatch(removeErrors());
         }
     }, [dispatch, id])
+    //add to cart api call
+    const addtocart = () => {
+        dispatch(addItemsToCart({ id: id, quantity: quantity }))
+    }
 
     //error dispatch
     useEffect(() => {
@@ -34,7 +41,43 @@ const ProductDetails = () => {
             toast.error(error);
             dispatch(removeErrors());
         }
-    }, [dispatch, error])
+        if (cartError) {
+            console.log("Error:", cartError);
+            toast.error(error);
+            dispatch(removeErrors());
+        }
+    }, [dispatch, error,cartError])
+
+    //success dispatch
+    useEffect(() => {
+        if (success) {
+           toast.success(message,{autoClose:1000});
+           dispatch(removeMessage());
+        }
+     
+    }, [dispatch, success,message])
+
+
+    //increse product quantity
+    const decreseQuantity = () => {
+        if (quantity <= 1) {
+            toast.error("Quantitiy cannot be less than 1 ", { autoClose: 1000 });
+            dispatch(removeErrors());
+            return;
+        }
+        setQuantity((prev) => prev - 1);
+    }
+    //decrease product quantity
+    const increseQuantity = () => {
+        if (product.stock <= quantity) {
+            toast.error("cannot exceed available stock", { autoClose: 1000 });
+            dispatch(removeErrors());
+            return;
+        }
+        setQuantity((prev) => prev + 1)
+    }
+
+
 
 
     return (
@@ -71,20 +114,29 @@ const ProductDetails = () => {
                                     product?.stock > 0 ? (<>
                                         <div className="flex items-center gap-2 my-5">
                                             <span className="font-medium mr-2">Quantity:</span>
-                                            <button className="w-9 h-9 border border-[#D5D9D9] bg-gradient-to-b from-[#F7F8FA] to-[#E7E9EC] text-lg rounded">-</button>
+                                            <button className="w-9 h-9 border border-[#D5D9D9] bg-gradient-to-b
+                                             from-[#F7F8FA] to-[#E7E9EC] text-lg rounded"
+                                                onClick={decreseQuantity}>-</button>
                                             <input
                                                 type="text"
-                                                value={1}
+                                                value={quantity}
                                                 readOnly
                                                 className="w-[50px] h-9 text-center border border-[#D5D9D9] text-base"
                                             />
-                                            <button className="w-9 h-9 border border-[#D5D9D9] bg-gradient-to-b from-[#F7F8FA] to-[#E7E9EC] text-lg rounded">+</button>
+                                            <button className="w-9 h-9 border
+                                             border-[#D5D9D9] bg-gradient-to-b
+                                              from-[#F7F8FA] to-[#E7E9EC] text-lg rounded"
+                                                onClick={increseQuantity}>+</button>
                                         </div>
                                     </>) : ""
                                 }
                                 {/* Add to cart */}
-                                <button className="w-full py-3 px-5 border border-[var(--bg-primary)] rounded-lg text-base cursor-pointer my-5 text-[var(--text-primary)] bg-[var(--border-color)] hover:bg-[var(--bg-secondary)]">
-                                    Add to Cart
+                                <button className="w-full px-4 py-3 font-semibold text-white rounded-lg transition-colors duration-300 ease-in-out"
+                                    style={{ backgroundColor: '#4a235a' }}
+                                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#5b2c6f'}
+                                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#4a235a'} onClick={addtocart}
+                                    disabled={cartLoading}>
+                                    {cartLoading ? "Adding" : "Add to Cart"}
                                 </button>
 
                                 <form className="bg-[#F8F8F8] p-5 rounded mb-8">
@@ -111,7 +163,7 @@ const ProductDetails = () => {
                         {
                             product?.reviews.length > 0 ? (<div className="mt-6">
                                 {
-                                    product.reviews.map((item,index) => (
+                                    product.reviews.map((item, index) => (
                                         <div className="py-5 border-b border-[#E7E7E7]">
                                             <p className="my-2 text-left text-[#333] font-bold">{item.name}</p>
                                             <p className="my-2 text-left text-[#333] ">{item.comment}</p>

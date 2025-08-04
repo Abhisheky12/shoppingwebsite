@@ -45,7 +45,7 @@ const UpdateProfile = () => {
   }
 
 
-  //handling erroro and success message 
+  //handling error and success message 
   useEffect(() => {
     if (error) {
       toast.error(error, { autoClose: 1000 });

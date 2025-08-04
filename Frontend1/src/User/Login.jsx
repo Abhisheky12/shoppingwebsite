@@ -94,7 +94,7 @@ function Login() {
                     <div className="text-sm text-center text-gray-600 space-y-2">
                         <p>
                             Forgot your password?{' '}
-                            <Link to="/requestresetpassword" className="font-medium text-indigo-600 hover:text-indigo-500">
+                            <Link to="/forgotpassword" className="font-medium text-indigo-600 hover:text-indigo-500">
                                 Reset Here
                             </Link>
                         </p>

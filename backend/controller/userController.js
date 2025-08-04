@@ -13,13 +13,33 @@ const registerUser = async (req, res) => {
     try {
         const { name, email, password, avatar } = req.body;
 
+
+        //validting field
+        if (!name || !email || !password || !avatar) {
+            return res.status(400).json({
+                success: false,
+                message: "All fields are required"
+            });
+        }
+
+        //password length
+        if (password.length < 8) {
+            return res.status(400).json({
+                success: false,
+                message: "Password must be 8 characters"
+            })
+        }
+
+
         const myCloud = await cloudinary.uploader.upload(avatar, {
             folder: "avatars",
             width: 150,
             crop: "scale"
         })
+
+
         //hash password
-        const hashpassword = await bcrypt.hash(password, 7);
+        const hashpassword = await bcrypt.hash(password, 10);
         //creting user
         const user = await User.create({
             name,
@@ -73,6 +93,8 @@ const loginUser = async (req, res) => {
     try {
 
         const { email, password } = req.body;
+        console.log(email, password);
+
 
         if (!email) {
             throw new Error("Email cannot be empty");
@@ -82,12 +104,16 @@ const loginUser = async (req, res) => {
         }
 
         const user = await User.findOne({ email }).select("+password");
+        console.log(user);
+
         if (!user) {
             throw new Error("User not exist.Please enter valid email");
         }
 
         // const match=await bcrypt.compare(password,user.password);
         const isPasswordValid = await user.verifyPassword(password);
+        console.log(isPasswordValid);
+
         if (!isPasswordValid) {
             throw new Error("Please enter valid email or password");
         }
@@ -154,11 +180,11 @@ const requestresetPassword = async (req, res) => {
         // Hash token and set fields
         const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
         user.resetPasswordToken = hashedToken;
-        user.resetPasswordExpire = Date.now() + 5 * 60 * 1000;
+        user.resetPasswordExpire = Date.now() + 30 * 60 * 1000;
 
         await user.save({ validateBeforeSave: false });
 
-        const resetPasswordURL = `http://localhost/user/reset/${resetToken}`;
+        const resetPasswordURL = `${process.env.FRONTEND_URL}/reset/${resetToken}`;
         const message = `Use the following link to reset your password: ${resetPasswordURL}.\n\nThis link will expire in 5 minutes.\n\nIf you did not request a password reset, please ignore this message`;
 
         // Try sending the email
@@ -196,8 +222,17 @@ const requestresetPassword = async (req, res) => {
 const resetPassword = async (req, res) => {
 
     try {
-        const tokenid = req.params.resettoken;
-        console.log(tokenid);
+        const tokenid = req.params.token;
+        const { password, confirmPassword } = req.body;
+
+
+        //password length
+        if (password.length < 8) {
+            return res.status(400).json({
+                success: false,
+                message: "Password must be 8 characters"
+            })
+        }
 
         const resetPasswordToken = crypto.createHash("sha256").update(tokenid).digest("hex");
         const user = await User.findOne({
@@ -208,7 +243,7 @@ const resetPassword = async (req, res) => {
             throw new Error("reset Password token is invalid or has been expired")
         }
 
-        const { password, confirmPassword } = req.body;
+
         if (password != confirmPassword) {
             throw new Error("Password not  match")
         }
@@ -221,15 +256,17 @@ const resetPassword = async (req, res) => {
         await user.save({ validateBeforeSave: false });
 
         return res.status(200).json({
-            status: true,
+            success: true,
             message: "Password updated successfully"
         })
 
 
 
     } catch (error) {
+        console.log(error);
+
         return res.status(404).json({
-            status: false,
+            success: false,
             message: error.message
         })
     }
@@ -247,7 +284,7 @@ const fetchProfile = async (req, res) => {
 //update password
 const updatePassword = async (req, res) => {
     try {
-        const { oldpassword, newpassword, confirmNewPassword } = req.body;
+        const { oldpassword, newpassword, confirmPassword } = req.body;
         const user = await User.findById(req.user._id).select("+password");
 
         const verifypassword = await bcrypt.compare(oldpassword, user.password);
@@ -259,7 +296,7 @@ const updatePassword = async (req, res) => {
             })
         }
 
-        if (newpassword != confirmNewPassword) {
+        if (newpassword != confirmPassword) {
             return res.status(400).json({
                 success: false,
                 message: "Confirm password not matched"
@@ -273,7 +310,7 @@ const updatePassword = async (req, res) => {
 
 
         return res.status(200).json({
-            success: false,
+            success: true,
             message: "Password updated successfully"
         })
 
@@ -300,7 +337,7 @@ const updateProfile = async (req, res) => {
             email
         }
 
-         //  Handle Cloudinary upload ONLY if a new avatar was submitted
+        //  Handle Cloudinary upload ONLY if a new avatar was submitted
         if (avatar) {
             const currentUser = await User.findById(req.user._id);
 

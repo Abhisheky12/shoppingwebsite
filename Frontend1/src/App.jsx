@@ -13,6 +13,9 @@ import Profile from './User/Profile';
 import ProtechtedRoute from './components/ProtectedRoute';
 import ProtectedRoute from './components/ProtectedRoute';
 import UpdateProfile from './User/UpdateProfile';
+import UpdatePassword from './User/UpdatePassword';
+import ForgotPassword from './User/ForgotPassword';
+import ResetPassword from './User/ResetPassword';
 
 
 
@@ -37,8 +40,11 @@ const App = () => {
         <Route path="/products" element={<Products />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/profile" element={<ProtectedRoute element={<Profile/>} />} />
-        <Route path="/updateprofile" element={<ProtectedRoute element={<UpdateProfile/>} />} />
+        <Route path="/profile" element={<ProtectedRoute element={<Profile />} />} />
+        <Route path="/updateprofile" element={<ProtectedRoute element={<UpdateProfile />} />} />
+        <Route path="/updatepassword" element={<ProtectedRoute element={<UpdatePassword />} />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
+         <Route path="/reset/:token" element={<ResetPassword />} />
       </Routes>
     </BrowserRouter>
   )
