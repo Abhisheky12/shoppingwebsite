@@ -12,6 +12,7 @@ const Navbar = () => {
     const navigate=useNavigate();
     const dispatch=useDispatch();
     const {user,isAuthenticated}=useSelector((state)=>state.user);
+    const {cartItems}=useSelector((state)=>state.cart);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -71,7 +72,7 @@ const Navbar = () => {
                     {/* Cart Icon */}
                     <Link to="/cart" className="relative text-gray-200 hover:text-blue-400">
                         <ShoppingCart className='text-2xl' />
-                        <span className='absolute -top-2 -right-2 bg-blue-500 text-white text-xs font-semibold min-w-[20px] h-5 rounded-full flex items-center justify-center px-1'>0</span>
+                        <span className='absolute -top-2 -right-2 bg-blue-500 text-white text-xs font-semibold min-w-[20px] h-5 rounded-full flex items-center justify-center px-1'>{cartItems.length}</span>
                     </Link>
 
                    {/* === USER PROFILE OR REGISTER ICON === */}

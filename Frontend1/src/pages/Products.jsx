@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import Noproduct from '../components/Noproduct'
 import Pagination from '@mui/material/Pagination'
-
+import Loader from '../components/loader';
 
 const Products = () => {
     const { loading, error, products, resultsPerPage, productCount } = useSelector((state) => state.product);
@@ -73,6 +73,7 @@ const Products = () => {
             <>
                 <PageTitle title="All Products" />
                 <Navbar />
+                <Loader/>
                 <Footer />
             </>
         )

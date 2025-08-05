@@ -5,17 +5,35 @@ import Footer from '../components/Footer';
 import CartItem from './CartItem';
 import { useSelector } from 'react-redux';
 import CartEmpty from './Cartempty';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Cart = () => {
 
     const { cartItems } = useSelector((state) => state.cart);
+    const { isAuthenticated } = useSelector((state) => state.user);
+    const navigate=useNavigate();
+    //cart total
+    const subTotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    const tax = subTotal * 0.10;
+    const shipping = subTotal > 500 ? 0 : 50;
+    const total = subTotal + tax + shipping;
+
+    const handlecheckout = () => {
+        if (!isAuthenticated) {
+          navigate("/login");
+          toast.error("Login to continue",{autoClose:1000,toastId:"cart-checkout"})
+        }
+        else{
+            navigate("/shipping");
+        }
+    }
 
 
     return (
         <>
             <PageTitle title="Your Cart" />
             <Navbar />
-
             {
                 cartItems.length === 0 ? <CartEmpty /> : (
                     <>
@@ -27,7 +45,7 @@ const Cart = () => {
                                 <div className="w-full lg:w-3/4 bg-white px-4 sm:px-10 py-10">
                                     <div className="flex justify-between border-b pb-8">
                                         <h1 className="font-semibold text-2xl">Your Cart</h1>
-                                        <h2 className="font-semibold text-2xl">1 Item</h2>
+                                        <h2 className="font-semibold text-2xl">{cartItems.length} Item</h2>
                                     </div>
 
                                     {/* Cart Items Header - Hidden on mobile */}
@@ -52,24 +70,25 @@ const Cart = () => {
                                     <div className="mt-8">
                                         <div className="flex font-semibold justify-between py-2 text-sm uppercase">
                                             <span>Subtotal</span>
-                                            <span>₹300.00</span>
+                                            <span>{subTotal}</span>
                                         </div>
                                         <div className="flex justify-between py-2 text-sm uppercase">
                                             <span>Tax (10%)</span>
-                                            <span>₹54.00</span>
+                                            <span>{tax}</span>
                                         </div>
                                         <div className="flex justify-between py-2 text-sm uppercase">
                                             <span>Shipping</span>
-                                            <span>₹50.00</span>
+                                            <span>{shipping}</span>
                                         </div>
                                     </div>
 
                                     <div className="border-t mt-8">
                                         <div className="flex font-semibold justify-between py-6 text-sm uppercase">
                                             <span>Total</span>
-                                            <span>₹404.00</span>
+                                            <span>{total}</span>
                                         </div>
-                                        <button className="bg-gray-800 font-semibold hover:bg-gray-900 py-3 text-sm text-white uppercase w-full rounded">
+                                        <button className="bg-gray-800 font-semibold hover:bg-gray-900
+                                         py-3 text-sm text-white uppercase w-full rounded"  onClick={handlecheckout}>
                                             Proceed to Checkout
                                         </button>
                                     </div>
@@ -80,7 +99,6 @@ const Cart = () => {
                     </>
                 )
             }
-
             <Footer />
         </>
     );
