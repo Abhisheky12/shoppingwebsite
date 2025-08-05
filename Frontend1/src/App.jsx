@@ -16,6 +16,7 @@ import UpdateProfile from './User/UpdateProfile';
 import UpdatePassword from './User/UpdatePassword';
 import ForgotPassword from './User/ForgotPassword';
 import ResetPassword from './User/ResetPassword';
+import Cart from './cart/Cart';
 
 
 
@@ -44,7 +45,8 @@ const App = () => {
         <Route path="/updateprofile" element={<ProtectedRoute element={<UpdateProfile />} />} />
         <Route path="/updatepassword" element={<ProtectedRoute element={<UpdatePassword />} />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
-         <Route path="/reset/:token" element={<ResetPassword />} />
+        <Route path="/reset/:token" element={<ResetPassword />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </BrowserRouter>
   )

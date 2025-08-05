@@ -31,7 +31,7 @@ const Product = ({ product }) => {
         </div>
 
         <span className="text-xs text-gray-400 mb-3">
-          ({product.numofReviews} Review{product.numofReviews !== 1 && "s"})
+          ({product.numofReviews} Review)
         </span>
 
         <button

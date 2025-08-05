@@ -104,7 +104,7 @@ const ProductDetails = () => {
 
                             {/* Product Info Section */}
                             <div className="p-5 w-[500px] text-left">
-                                <h2 className="text-2xl mb-4 text-[#0F1111] font-semibold">Product Name</h2>
+                                <h2 className="text-2xl mb-4 text-[#0F1111] font-semibold">{product?.name}</h2>
                                 <p className="mb-2">{product?.description}</p>
                                 <p className="mb-2">{product?.price}/-</p>
                                 <span className="block">{`${product?.numofReviews} Review`}</span>
@@ -131,13 +131,19 @@ const ProductDetails = () => {
                                     </>) : ""
                                 }
                                 {/* Add to cart */}
-                                <button className="w-full px-4 py-3 font-semibold text-white rounded-lg transition-colors duration-300 ease-in-out"
+                               {
+                                product?.stock>0?(
+                                    <>
+                                     <button className="w-full px-4 py-3 font-semibold text-white rounded-lg transition-colors duration-300 ease-in-out"
                                     style={{ backgroundColor: '#4a235a' }}
                                     onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#5b2c6f'}
                                     onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#4a235a'} onClick={addtocart}
                                     disabled={cartLoading}>
                                     {cartLoading ? "Adding" : "Add to Cart"}
                                 </button>
+                                    </>
+                                ):""
+                               }
 
                                 <form className="bg-[#F8F8F8] p-5 rounded mb-8">
                                     <h3 className="text-lg font-semibold mb-2">Write a review</h3>
