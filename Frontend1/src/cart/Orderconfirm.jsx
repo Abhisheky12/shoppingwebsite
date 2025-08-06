@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import Navbar from '../components/Navbar';
 import PageTitle from '../components/PageTitle';
 import Footer from '../components/Footer';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Orderconfirm = () => {
     const {shippingInfo,cartItems}=useSelector((state)=>state.cart);
@@ -115,7 +115,13 @@ const Orderconfirm = () => {
         </div>
         
         {/* Proceed to Payment Button */}
-        <div className="flex justify-end">
+        <div className="flex   justify-between">
+            <button
+            type="button"
+            className="bg-white text-gray-800 font-semibold py-3 px-8 rounded-lg border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition-colors duration-300"
+          >
+            <Link to="/shipping">Go back</Link>
+          </button>
             <button
               type="button"
               className="bg-gray-800 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 transition-colors duration-300"

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import CartItems from '../cart/CartItem';
 
 
-const UserDashboard = ({ user }) => {
+const UserDashboard = ({ user }) =>{
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();

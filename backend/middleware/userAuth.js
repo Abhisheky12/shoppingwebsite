@@ -6,7 +6,6 @@ const verifyUserAuth = async (req, res, next) => {
 
       //extracting token from send by browser
       const { token } = req.cookies;
-      console.log(token);
       
       if (!token) {
          throw new Error("Please login to continue");
