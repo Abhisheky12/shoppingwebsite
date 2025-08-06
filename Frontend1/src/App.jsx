@@ -20,6 +20,7 @@ import Cart from './cart/Cart';
 import Shipping from './cart/Shipping';
 import Orderconfirm from './cart/Orderconfirm';
 import Payment from './cart/Payment';
+import PaymentSuccess from './cart/PaymentSuccess';
 
 
 
@@ -52,7 +53,8 @@ const App = () => {
         <Route path="/cart" element={<ProtectedRoute element={<Cart />} />} />
         <Route path="/shipping" element={<ProtectedRoute element={<Shipping />} />} />
         <Route path="/order/confirm" element={<ProtectedRoute element={<Orderconfirm />} />} />
-         <Route path="/process/payment" element={<ProtectedRoute element={<Payment />} />} />
+        <Route path="/process/payment" element={<ProtectedRoute element={<Payment />} />} />
+        <Route path="/paymentSuccess" element={<ProtectedRoute element={<PaymentSuccess />} />} />
       </Routes>
     </BrowserRouter>
   )
