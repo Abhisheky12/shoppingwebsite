@@ -215,11 +215,10 @@ const getsingleProduct = async (req, res) => {
 }
 //creating and updating review
 const createReviewForProduct = async (req, res) => {
-    const { rating, comment, productId } = req.body;
+    const {comment, productId } = req.body;
     const curruntreview = {
         user: req.user._id,
         name: req.user.name,
-        rating: Number(rating),
         comment:comment
     }
     const product = await Product.findById(productId);
@@ -234,8 +233,6 @@ const createReviewForProduct = async (req, res) => {
 
     if (reviewExists) {
         reviewExists.comment = comment;
-        reviewExists.rating = rating;
-
     }
     else {
         product.reviews.push(curruntreview);

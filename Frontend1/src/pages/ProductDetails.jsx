@@ -5,21 +5,22 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../components/loader';
-import { getProductDetails, removeErrors } from '../features/products/productSlice';
+import { createReview, getProductDetails, removeErrors, removeSuccess } from '../features/products/productSlice';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { addItemsToCart, removeMessage } from '../features/cart/cartSlice';
 
 const ProductDetails = () => {
 
-    const { product, error, loading } = useSelector((state) => state.product);
+    const { product, error, loading, reviewSuccess, reviewLoading } = useSelector((state) => state.product);
     const { loading: cartLoading, error: cartError, success, message, cartItems } = useSelector((state) => state.cart);
     const dispatch = useDispatch();
     const [quantity, setQuantity] = useState(1);
     const { id } = useParams();
- 
+    const [comment, setComment] = useState("");
+
     console.log(cartItems);
-    
+
     //get api
     useEffect(() => {
         if (id) {
@@ -46,16 +47,16 @@ const ProductDetails = () => {
             toast.error(error);
             dispatch(removeErrors());
         }
-    }, [dispatch, error,cartError])
+    }, [dispatch, error, cartError])
 
     //success dispatch
     useEffect(() => {
         if (success) {
-           toast.success(message,{autoClose:1000});
-           dispatch(removeMessage());
+            toast.success(message, { autoClose: 1000 });
+            dispatch(removeMessage());
         }
-     
-    }, [dispatch, success,message])
+
+    }, [dispatch, success, message])
 
 
     //increse product quantity
@@ -76,6 +77,19 @@ const ProductDetails = () => {
         }
         setQuantity((prev) => prev + 1)
     }
+    //handle review 
+    const handlereviewSubmit = (e) => {
+        e.preventDefault();
+        dispatch(createReview({ productId: id, comment: comment }));
+    }
+
+    useEffect(() => {
+        if (reviewSuccess) {
+            toast.success("Reviw Submitted Successfully");
+            setComment("");
+            dispatch(removeSuccess());
+        }
+    })
 
 
 
@@ -84,8 +98,6 @@ const ProductDetails = () => {
         <>
             <PageTitle title={`${product?.name}-details`} />
             <Navbar />
-
-
             {loading ? (
                 <Loader />
             ) : (
@@ -131,32 +143,36 @@ const ProductDetails = () => {
                                     </>) : ""
                                 }
                                 {/* Add to cart */}
-                               {
-                                product?.stock>0?(
-                                    <>
-                                     <button className="w-full px-4 py-3 font-semibold text-white rounded-lg transition-colors duration-300 ease-in-out"
-                                    style={{ backgroundColor: '#4a235a' }}
-                                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#5b2c6f'}
-                                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#4a235a'} onClick={addtocart}
-                                    disabled={cartLoading}>
-                                    {cartLoading ? "Adding" : "Add to Cart"}
-                                </button>
-                                    </>
-                                ):""
-                               }
+                                {
+                                    product?.stock > 0 ? (
+                                        <>
+                                            <button className="w-full px-4 py-3 font-semibold text-white rounded-lg transition-colors duration-300 ease-in-out"
+                                                style={{ backgroundColor: '#4a235a' }}
+                                                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#5b2c6f'}
+                                                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#4a235a'} onClick={addtocart}
+                                                disabled={cartLoading}>
+                                                {cartLoading ? "Adding" : "Add to Cart"}
+                                            </button>
+                                        </>
+                                    ) : ""
+                                }
 
-                                <form className="bg-[#F8F8F8] p-5 rounded mb-8">
+                                <form className="bg-[#F8F8F8] p-5 rounded mb-8" onSubmit={handlereviewSubmit}>
                                     <h3 className="text-lg font-semibold mb-2">Write a review</h3>
                                     <textarea
                                         placeholder="Write your review here"
                                         className="w-full min-h-[100px] p-2 border border-[#D5D9D9] rounded resize-y mb-3"
+                                        value={comment}
+                                        onChange={(e) => setComment(e.target.value)}
+                                        required
                                     ></textarea>
                                     <button
                                         type="submit"
                                         className="  text-white  py-2 px-5 rounded hover:bg-[#374759]"
-                                         style={{ backgroundColor: '#4a235a' }}
+                                        style={{ backgroundColor: '#4a235a' }}
+                                        disabled={reviewLoading}
                                     >
-                                        Submit Review
+                                        {reviewLoading ? "Submitting" : "Submit Review"}
                                     </button>
                                 </form>
                             </div>

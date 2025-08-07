@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios"
 
+
 //get all product
 export const getProduct = createAsyncThunk("product/getProduct", async ({keyword,page=1,category}, { rejectWithValue }) => {
     try {
@@ -38,6 +39,27 @@ export const getProductDetails = createAsyncThunk("product/getProductDetails", a
         return rejectWithValue(error.response?.data?.message || "An error occured")
     }
 })
+//submit review
+export const createReview = createAsyncThunk("product/createReview", async ({productId,comment}, { rejectWithValue }) => {
+    try {
+       
+        const config={
+            headers:{
+                "Content-Type":"application/json"
+            }
+        }
+        const { data } = await axios.post("/api/v1//createreview",{productId,comment},config);
+        console.log(data);
+        
+        return data;
+
+
+    } catch (error) {
+        //error.response?.data =object send by backed inside of catch block
+        return rejectWithValue(error.response?.data?.message || "An error occured")
+    }
+})
+
 
 const productSlice = createSlice({
     name: 'product',
@@ -48,12 +70,17 @@ const productSlice = createSlice({
         error: null,
         product: null,
         totalPages:0,
-        limit:0
+        limit:0,
+        reviewSuccess:false,
+        reviewLoading:false
 
     },
     reducers: {
         removeErrors: (state) => {
             state.error = null
+        },
+        removeSuccess:(state)=>{
+              state.reviewSuccess=false;
         }
     },
     //state =initialState object above here 
@@ -91,8 +118,23 @@ const productSlice = createSlice({
                 state.error = action.payload ||"Something went Wrong";
                 
             })
+            //createreview
+             builder.
+            addCase(createReview.pending, (state, action) => {
+                state.reviewLoading = true;
+                state.error = null;
+            })
+            .addCase(createReview.fulfilled,(state,action)=>{
+                state.reviewLoading =false;
+                state.reviewSuccess=true;
+            })
+            .addCase(createReview.rejected,(state,action)=>{
+                state.reviewLoading = false;
+                state.error = action.payload ||"Something went Wrong";
+                
+            })
     }
 })
 
-export const { removeErrors } = productSlice.actions;
+export const { removeErrors, removeSuccess } = productSlice.actions;
 export default productSlice.reducer;
