@@ -5,20 +5,28 @@ const { Order } = require("../modals/orderModels");
 
 //create new order(admin)
 const createNewOrder = async (req, res) => {
-    const { shippingInfo, orderItems, paymentInfo, itemPrice,
-        taxPrice, shippingPrice, totalPrice } = req.body;
+    try {
+        const { shippingInfo, orderItems, paymentInfo, itemPrice,
+            taxPrice, shippingPrice, totalPrice } = req.body;
 
 
-    const order = await Order.create({
-        shippingInfo, orderItems, paymentInfo, itemPrice,
-        taxPrice, shippingPrice, totalPrice, paidAt: Date.now(), user: req.user._id
-    });
+        const order = await Order.create({
+            shippingInfo, orderItems, paymentInfo, itemPrice,
+            taxPrice, shippingPrice, totalPrice, paidAt: Date.now(), user: req.user._id
+        });
 
 
-    res.status(200).json({
-        success: true,
-        order
-    })
+        res.status(200).json({
+            success: true,
+            message: "Order Created Successfully",
+            order
+        })
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: "Order Creation Failed"
+        })
+    }
 }
 //get single order(admin)
 const getSingleOrder = async (req, res) => {

@@ -11,6 +11,7 @@ const UserDashboard = ({ user }) =>{
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { success, loading, error, status } = useSelector((state) => state.user);
+  const{cartItems}=useSelector((state)=>state.cart)
 
   const handleuderorders = (e) => {
     navigate("/orders/user")
@@ -45,7 +46,7 @@ const UserDashboard = ({ user }) =>{
         className="flex items-center space-x-2 bg-transparent text-white focus:outline-none"
       >
         <img
-          src={user.avatar?.url ? user.avatar.url : "./images/Profile.jpeg"}
+          src={user.avatar?.url ? user.avatar?.url : "./images/Profile.jpeg"}
           alt="Profile"
           className="w-7 h-7 rounded-full object-cover border border-white"
         />
@@ -79,7 +80,7 @@ const UserDashboard = ({ user }) =>{
               className={`${CartItems.length ? "text-green-300" : "text-gray-200"} text-left hover:bg-gray-700 px-4 py-2 rounded`}
               onClick={handleCart}
             >
-              Cart({CartItems.length})
+              Cart({cartItems.length})
             </button>
             <button
               className="text-gray-200 text-left hover:bg-gray-700 px-4 py-2 rounded"

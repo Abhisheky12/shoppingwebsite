@@ -6,7 +6,9 @@ const {verifyUserAuth, roleBasedAccess}=require("../middleware/userAuth");
 
 //creating order
 orderRouter.post("/new/order",verifyUserAuth,createNewOrder);
-//getsingle order
+//getsingle order(user)
+orderRouter.get("/order/:id",verifyUserAuth,getSingleOrder);
+//getsingle order(admin)
 orderRouter.get("/admin/order/:id",verifyUserAuth,roleBasedAccess("admin"),getSingleOrder);
 //All my orders(user want to see their order)
 orderRouter.get("/orders/user",verifyUserAuth,allMyOrders);

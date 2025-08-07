@@ -153,7 +153,8 @@ const ProductDetails = () => {
                                     ></textarea>
                                     <button
                                         type="submit"
-                                        className="bg-[var(--bg-primary)] text-white py-2 px-5 rounded hover:bg-[#374759]"
+                                        className="  text-white  py-2 px-5 rounded hover:bg-[#374759]"
+                                         style={{ backgroundColor: '#4a235a' }}
                                     >
                                         Submit Review
                                     </button>
