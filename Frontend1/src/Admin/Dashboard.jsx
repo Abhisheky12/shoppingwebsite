@@ -21,7 +21,7 @@ const Dashboard = () => {
                             <p className="text-gray-400 text-sm uppercase">Products</p>
                             <ul className="space-y-2 mt-2">
                                 <li><Link to="/admin/getallproduct" className="block hover:text-yellow-400">All Products</Link></li>
-                                <li><Link to="" className="block hover:text-yellow-400">Create Product</Link></li>
+                                <li><Link to="/admin/createproduct" className="block hover:text-yellow-400">Create Product</Link></li>
                             </ul>
                         </div>
                         <div>

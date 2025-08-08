@@ -18,12 +18,7 @@ const productSchema = new Schema({
         require: [true, "Please enter product price"],
         maxLength: [7, "Price cannot exceed 7 digits"]
     },
-
-    ratings: {
-        type: Number,
-        default: 0
-    },
-
+    
     image: [
         {
             public_id: {

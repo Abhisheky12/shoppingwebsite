@@ -1,9 +1,28 @@
 const { Product } = require("../modals/productModel");
 const { APIFunctionality } = require("../utils/apiFunctionality");
-
-//create product
+const cloudinary=require("cloudinary").v2;
+//create product (admin)
 const createProducts = async (req, res) => {
     try {
+        let image=[];
+        if(typeof req.body.images==="string"){
+            image.push(req.body.images)
+        }
+        else{
+            image=req.body.images
+        }
+        const imagelinks=[];
+        for(let i=0;i<image.length;i++){
+            const result=await cloudinary.uploader.upload(image[i],{
+                  folder:"products"
+            })
+            imagelinks.push({
+                public_id:result.public_id,
+                url:result.secure_url
+            })
+        }
+        req.body.image=imagelinks;
+        
         //extracting user id to store in product body in user field as in productmodel
         req.body.user = req.user._id;
         const product = await Product.create(req.body);
@@ -65,7 +84,7 @@ const getAllProducts = async (req, res) => {
 
         //pagination
         const page = Number(req.query.page) || 1;
-        const limit = Number(req.query.limit) || 4;
+        const limit = Number(req.query.limit) || 15;
 
         const skip = (page - 1) * limit;
 
