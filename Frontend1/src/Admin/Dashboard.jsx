@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import PageTitle from "../components/PageTitle";
 import { FaBox, FaShoppingCart, FaStar, FaDollarSign, FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
     return (
@@ -19,26 +20,26 @@ const Dashboard = () => {
                         <div>
                             <p className="text-gray-400 text-sm uppercase">Products</p>
                             <ul className="space-y-2 mt-2">
-                                <li><a href="#" className="block hover:text-yellow-400">All Products</a></li>
-                                <li><a href="#" className="block hover:text-yellow-400">Create Product</a></li>
+                                <li><Link to="/admin/getallproduct" className="block hover:text-yellow-400">All Products</Link></li>
+                                <li><Link to="" className="block hover:text-yellow-400">Create Product</Link></li>
                             </ul>
                         </div>
                         <div>
                             <p className="text-gray-400 text-sm uppercase">Users</p>
                             <ul className="space-y-2 mt-2">
-                                <li><a href="#" className="block hover:text-yellow-400">All Users</a></li>
+                                <li><Link to="" className="block hover:text-yellow-400">All Users</Link></li>
                             </ul>
                         </div>
                         <div>
                             <p className="text-gray-400 text-sm uppercase">Orders</p>
                             <ul className="space-y-2 mt-2">
-                                <li><a href="#" className="block hover:text-yellow-400">All Orders</a></li>
+                                <li><Link to="" className="block hover:text-yellow-400">All Orders</Link></li>
                             </ul>
                         </div>
                         <div>
                             <p className="text-gray-400 text-sm uppercase">Reviews</p>
                             <ul className="space-y-2 mt-2">
-                                <li><a href="#" className="block hover:text-yellow-400">All Reviews</a></li>
+                                <li><Link to="" className="block hover:text-yellow-400">All Reviews</Link></li>
                             </ul>
                         </div>
                     </nav>

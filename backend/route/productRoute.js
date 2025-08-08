@@ -15,7 +15,7 @@ productRouter.delete("/admin/deleteproduct/:id",verifyUserAuth,roleBasedAccess("
 productRouter.get("/getsingleproduct/:id",getsingleProduct);
 //Admin get all product
 productRouter.get("/admin/getallproduct",getAdminProducts);
-//creating and updating review
+//creating and updating review  
 productRouter.put("/createreview",verifyUserAuth,createReviewForProduct);
 //getProduct review
 productRouter.get("/review",getProductReviews);
