@@ -85,11 +85,12 @@ const ProductDetails = () => {
 
     useEffect(() => {
         if (reviewSuccess) {
-            toast.success("Reviw Submitted Successfully");
+            toast.success("Review Submitted Successfully");
             setComment("");
             dispatch(removeSuccess());
+            dispatch(getProductDetails(id));
         }
-    })
+    },[reviewSuccess,id,dispatch])
 
 
 

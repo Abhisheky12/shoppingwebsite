@@ -48,9 +48,7 @@ export const createReview = createAsyncThunk("product/createReview", async ({pro
                 "Content-Type":"application/json"
             }
         }
-        const { data } = await axios.post("/api/v1//createreview",{productId,comment},config);
-        console.log(data);
-        
+        const { data } = await axios.put("/api/v1/createreview",{productId,comment},config);
         return data;
 
 
