@@ -34,7 +34,7 @@ function Login() {
         //success message 
         useEffect(() => {
             if (success) {
-                toast.success("Login Successful", { position: "top-center", autoClose: 1000 });
+                toast.success("Login Successful", { position: "top-center", autoClose: 1000,toastId:"login" });
                 dispatch(removeSuccess());
              
             }
