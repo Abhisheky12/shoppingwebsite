@@ -5,7 +5,7 @@ import PageTitle from '../components/PageTitle'; // Adjust path as needed
 import Footer from '../components/Footer'; // Adjust path as needed
 import { Delete, Edit } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAdminProducts, removeErrors } from '../features/admin/adminSlice';
+import { deleteProducts, fetchAdminProducts, removeErrors } from '../features/admin/adminSlice';
 import { toast } from 'react-toastify';
 import Loader from '../components/loader';
 
@@ -15,7 +15,7 @@ const ProductList = () => {
 
 
 
-    const { products, loading, error } = useSelector((state) => state.admin);
+    const { products, loading, error,deleterror,deletesuccess } = useSelector((state) => state.admin);
     console.log(products);
 
     const dispatch = useDispatch();
@@ -29,6 +29,37 @@ const ProductList = () => {
             dispatch(removeErrors());
         }
     }, [dispatch, error])
+
+    //handle delete error and success
+    useEffect(() => {
+        if (deleterror) {
+            toast.error("Failed to delete products", { autoClose: 1000 });
+            dispatch(removeErrors());
+        }
+        if (deletesuccess) {
+            toast.success("product deleted successfully", { autoClose: 1000 });
+            dispatch(removeErrors());
+        }
+    }, [dispatch,deleterror,deletesuccess])
+
+
+   const handleDelete=(productId)=>{
+    const isConfirmed=window.confirm("Are you sure to delete this product?")
+    if(isConfirmed){
+        dispatch(deleteProducts({id:productId}));
+        if (error) {
+            toast.error("Failed to fetch product", { autoClose: 1000 });
+            dispatch(removeErrors());
+        }
+        if (success) {
+            toast.error("Product deleted successfully", { autoClose: 1000 });
+            dispatch(removeSuccess());
+        }
+    }
+   }
+
+
+
 
     if (!products || products.length === 0) {
         return (
@@ -93,7 +124,7 @@ const ProductList = () => {
                                                             <Link to={`/admin/product/${product._id}`} className="group">
                                                                 <Edit />
                                                             </Link>
-                                                            <button onClick={() => alert(`Delete product ${product._id}?`)} className="group">
+                                                            <button onClick={() =>handleDelete(product._id) } className="group">
                                                                 <Delete />
                                                             </button>
                                                         </div>

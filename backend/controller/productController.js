@@ -142,36 +142,38 @@ const updateProduct = async (req, res) => {
     try {
 
         const id = req.params.id;
-        let product = await Product.findById(id )
+        let product = await Product.findById(id)
 
         let image = [];
         if (typeof req.body.images === "string") {
             image.push(req.body.images)
         }
-        else  {
-            image = req.body.images
+         else if (Array.isArray(req.body.images)) {
+            image = req.body.images;
         }
-        if(image.length>0){
-            for(let i=0;i<product.image;i++){
+        
+        const imagelinks = [];
+        if (image.length > 0) {
+            for (let i = 0; i < product.image.length; i++) {
                 await cloudinary.uploader.destroy(product.image[i].public_id)
             }
-            //now upload new images
-             const imagelinks = [];
             for (let i = 0; i < image.length; i++) {
-            const result = await cloudinary.uploader.upload(image[i], {
-                folder: "products"
-            })
-            imagelinks.push({
-                public_id: result.public_id,
-                url: result.secure_url
-            })
+                const result = await cloudinary.uploader.upload(image[i], {
+                    folder: "products"
+                })
+                imagelinks.push({
+                    public_id: result.public_id,
+                    url: result.secure_url
+                })
+            }
+             req.body.image = imagelinks;
         }
-        req.body.image = imagelinks;
+
+       
 
         //extracting user id to store in product body in user field as in productmodel
         req.body.user = req.user._id;
 
-        }
 
         product = await Product.findByIdAndUpdate(id, req.body, {
             new: true,
@@ -219,9 +221,14 @@ const deleteProduct = async (req, res) => {
 
         const deleted = await Product.findByIdAndDelete(id);
 
+        for(let i=0;i<product.image.length;i++){
+            await cloudinary.uploader.destroy(product.image[i].public_id)
+        }
+
         return res.status(200).json({
             success: true,
-            message: "product deleted successfully"
+            message: "product deleted successfully",
+            product:deleted
         })
 
 

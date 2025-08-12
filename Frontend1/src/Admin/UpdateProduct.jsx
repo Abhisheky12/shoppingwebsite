@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import PageTitle from '../components/PageTitle'; // Assuming you have this component
 import { useDispatch, useSelector } from 'react-redux';
-import { createProducts, removeErrors, removeSuccess } from '../features/admin/adminSlice';
+import { createProducts, removeErrors, removeSuccess, updateProducts } from '../features/admin/adminSlice';
 import { toast } from 'react-toastify';
 import Loader from '../components/loader';
 import Footer from '../components/Footer';
@@ -19,6 +19,7 @@ const UpdateProduct = () => {
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
     const [stock, setStock] = useState('');
+    const [oldImages, setOldImages] = useState([]);
     const [images, setImages] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
 
@@ -62,11 +63,12 @@ const UpdateProduct = () => {
             setDescription(product.description);
             setCategory(product.category);
             setStock(product.stock);
-            setImages(product.image);
-            setImagePreviews(product.image);
+            setOldImages(product.image);
+            setImages([]);
+            setImagePreviews([]);
 
         }
-    })
+    }, [product, updateId])
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -81,7 +83,7 @@ const UpdateProduct = () => {
             myForm.append("images", img);
         })
 
-        dispatch(createProducts(myForm));
+        dispatch(updateProducts({ id: updateId, productdata: myForm }));
 
 
     };
@@ -101,7 +103,7 @@ const UpdateProduct = () => {
     return (
         <>
             <Navbar />
-            <PageTitle title="Create Product" />
+            <PageTitle title="update Product" />
 
             <div className="bg-gray-50 flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
@@ -185,9 +187,21 @@ const UpdateProduct = () => {
                             />
                         </div>
 
+
+                        {/* Old Image Previews */}
+                        {oldImages.length > 0 && (
+                            <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 border-t pt-4">
+                                <p className='col-span-full text-sm text-gray-500 mb-2'>Existing Images:</p>
+                                {oldImages.map((image, index) => (
+                                    <img key={index} src={image.url} alt="Old Product Preview" className="h-20 w-20 object-cover rounded-md" />
+                                ))}
+                            </div>
+                        )}
+
                         {/* Image Previews */}
-                        {imagePreviews.length > 0 && (
+                        {imagePreviews.length > 0 && (  
                             <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
+                                <p className='col-span-full text-sm text-gray-500 mb-2'>New Images:</p>
                                 {imagePreviews.map((image, index) => (
                                     <img
                                         key={index}
