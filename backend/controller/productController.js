@@ -1,28 +1,28 @@
 const { Product } = require("../modals/productModel");
 const { APIFunctionality } = require("../utils/apiFunctionality");
-const cloudinary=require("cloudinary").v2;
+const cloudinary = require("cloudinary").v2;
 //create product (admin)
 const createProducts = async (req, res) => {
     try {
-        let image=[];
-        if(typeof req.body.images==="string"){
+        let image = [];
+        if (typeof req.body.images === "string") {
             image.push(req.body.images)
         }
-        else{
-            image=req.body.images
+        else {
+            image = req.body.images
         }
-        const imagelinks=[];
-        for(let i=0;i<image.length;i++){
-            const result=await cloudinary.uploader.upload(image[i],{
-                  folder:"products"
+        const imagelinks = [];
+        for (let i = 0; i < image.length; i++) {
+            const result = await cloudinary.uploader.upload(image[i], {
+                folder: "products"
             })
             imagelinks.push({
-                public_id:result.public_id,
-                url:result.secure_url
+                public_id: result.public_id,
+                url: result.secure_url
             })
         }
-        req.body.image=imagelinks;
-        
+        req.body.image = imagelinks;
+
         //extracting user id to store in product body in user field as in productmodel
         req.body.user = req.user._id;
         const product = await Product.create(req.body);
@@ -142,7 +142,38 @@ const updateProduct = async (req, res) => {
     try {
 
         const id = req.params.id;
-        const product = await Product.findByIdAndUpdate(id, req.body, {
+        let product = await Product.findById(id )
+
+        let image = [];
+        if (typeof req.body.images === "string") {
+            image.push(req.body.images)
+        }
+        else  {
+            image = req.body.images
+        }
+        if(image.length>0){
+            for(let i=0;i<product.image;i++){
+                await cloudinary.uploader.destroy(product.image[i].public_id)
+            }
+            //now upload new images
+             const imagelinks = [];
+            for (let i = 0; i < image.length; i++) {
+            const result = await cloudinary.uploader.upload(image[i], {
+                folder: "products"
+            })
+            imagelinks.push({
+                public_id: result.public_id,
+                url: result.secure_url
+            })
+        }
+        req.body.image = imagelinks;
+
+        //extracting user id to store in product body in user field as in productmodel
+        req.body.user = req.user._id;
+
+        }
+
+        product = await Product.findByIdAndUpdate(id, req.body, {
             new: true,
             runValidators: true
         })
@@ -234,11 +265,11 @@ const getsingleProduct = async (req, res) => {
 }
 //creating and updating review
 const createReviewForProduct = async (req, res) => {
-    const {comment, productId } = req.body;
+    const { comment, productId } = req.body;
     const curruntreview = {
         user: req.user._id,
         name: req.user.name,
-        comment:comment
+        comment: comment
     }
     const product = await Product.findById(productId);
 
@@ -288,42 +319,42 @@ const getProductReviews = async (req, res) => {
         });
     }
 
-     return res.status(200).json({
-            success: true,
-            reviews:product.reviews   
-        });
+    return res.status(200).json({
+        success: true,
+        reviews: product.reviews
+    });
 
 }
 //Deleting review
-const deleteReview=async(req,res)=>{
-    const product=await Product.findById(req.query.productId);
-     if (!product) {
+const deleteReview = async (req, res) => {
+    const product = await Product.findById(req.query.productId);
+    if (!product) {
         return res.status(404).json({
             success: false,
             message: "Product not found"
         });
     }
     //filtering product
-    const reviews=product.reviews.filter(rev=>rev._id.toString()!==req.query.id.toString());
+    const reviews = product.reviews.filter(rev => rev._id.toString() !== req.query.id.toString());
 
     //after deleting review again calcualate no.of reviews remains
 
-    let avg=0;
-    reviews.forEach(rev=>
-        avg+=rev.rating
+    let avg = 0;
+    reviews.forEach(rev =>
+        avg += rev.rating
     )
-    product.reviews=reviews;
+    product.reviews = reviews;
     product.ratings = reviews.length > 0 ? Number((avg / reviews.length).toFixed(1)) : 0;
-    product.numofReviews=reviews.length;  
+    product.numofReviews = reviews.length;
 
     await product.save({ validateBeforeSave: false });
 
-    
+
     res.status(200).json({
         success: true,
         message: "Review deleted successfully"
     });
-    
+
 }
 //Admin-Getting all products
 const getAdminProducts = async (req, res) => {
@@ -338,7 +369,7 @@ const getAdminProducts = async (req, res) => {
 module.exports = {
     createProducts, getAllProducts
     , updateProduct, deleteProduct, getsingleProduct
-    , getAdminProducts, createReviewForProduct, getProductReviews,deleteReview
+    , getAdminProducts, createReviewForProduct, getProductReviews, deleteReview
 };
 
 

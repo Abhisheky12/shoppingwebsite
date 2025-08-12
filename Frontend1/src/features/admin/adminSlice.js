@@ -27,6 +27,22 @@ export const createProducts = createAsyncThunk("user/createProducts", async (pro
 
     }
 })
+//update product
+export const updateProducts = createAsyncThunk("user/updateProducts", async ({id,productdata}, { rejectWithValue }) => {
+    try {
+        const config={
+            headers:{
+                "Content-Type":"multipart/form-data"
+            }
+        }
+        const { data } = await axios.put(`/api/v1/admin/updateproduct/${id}`,productdata,config);
+        return data;
+    } catch (error) {
+        return rejectWithValue(error.response?.data || "Product update failed")
+
+    }
+})
+
 
 const adminSlice=createSlice({
     name:"admin",
@@ -35,6 +51,7 @@ const adminSlice=createSlice({
         success:false,
         loading:false,
         error:null,
+        product:{}
     },
     reducers:{
         removeErrors: (state) => {
@@ -75,7 +92,24 @@ const adminSlice=createSlice({
                 })
                 .addCase(createProducts.rejected, (state, action) => {
                     state.loading = false;
-                    state.error = action.payload?.message || "Product creation failed";
+                    state.error = action.payload?.message || "Product update failed";
+                    
+                })
+                 //update product
+            builder.
+                addCase(updateProducts.pending, (state, action) => {
+                    state.loading = true;
+                    state.error = null;
+                })
+                .addCase(updateProducts.fulfilled, (state, action) => {
+                    state.loading = false;
+                    state.success=action.payload.success;
+                    state.product=action.payload.product;
+                   
+                })
+                .addCase(updateProducts.rejected, (state, action) => {
+                    state.loading = false;
+                    state.error = action.payload?.message || "Product update failed";
                     
                 })
 }})

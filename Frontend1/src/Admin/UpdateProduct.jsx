@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import PageTitle from '../components/PageTitle'; // Assuming you have this component
@@ -5,8 +7,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createProducts, removeErrors, removeSuccess } from '../features/admin/adminSlice';
 import { toast } from 'react-toastify';
 import Loader from '../components/loader';
+import Footer from '../components/Footer';
+import { useParams } from 'react-router-dom';
+import { getProductDetails } from '../features/products/productSlice';
 
-const CreateProduct = () => {
+
+const UpdateProduct = () => {
+
     const [name, setProductName] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
@@ -15,8 +22,10 @@ const CreateProduct = () => {
     const [images, setImages] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
 
+    const { updateId } = useParams();
     const categories = ["GLASS", "SHIRT", "MOBILE", "DRESS", "TV", "RING", "SHOES", "WATCH", "BAG", "PANT", "T-SHIRT"];
-    const { success, loading, error } = useSelector((state) => state.admin);
+    const { product } = useSelector((state) => state.product);
+    const { loading, error, success } = useSelector((state) => state.admin);
     const dispatch = useDispatch();
 
 
@@ -39,6 +48,26 @@ const CreateProduct = () => {
         });
     };
 
+    //api call
+    useEffect(() => {
+
+        dispatch(getProductDetails(updateId));
+
+    }, [dispatch, updateId])
+    //render old detail
+    useEffect(() => {
+        if (product) {
+            setProductName(product.name);
+            setPrice(product.price);
+            setDescription(product.description);
+            setCategory(product.category);
+            setStock(product.stock);
+            setImages(product.image);
+            setImagePreviews(product.image);
+
+        }
+    })
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -54,14 +83,6 @@ const CreateProduct = () => {
 
         dispatch(createProducts(myForm));
 
-        setProductName("");
-        setPrice("");
-        setDescription("");
-        setCategory("");
-        setStock("");
-        setImages("");
-        setImagePreviews("");
-
 
     };
 
@@ -72,13 +93,10 @@ const CreateProduct = () => {
             dispatch(removeErrors());
         }
         if (success) {
-            toast.success("Product created successfully", { autoClose: 1000 });
+            toast.success("Product updated successfully", { autoClose: 1000 });
             dispatch(removeSuccess());
         }
     }, [error, dispatch, success]);
-
-
-
 
     return (
         <>
@@ -88,7 +106,7 @@ const CreateProduct = () => {
             <div className="bg-gray-50 flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg">
                     <form className="space-y-6" onSubmit={handleSubmit} encType='multipart/form-data'>
-                        <h1 className='text-center font-bold text-2xl'>Create Product</h1>
+                        <h1 className='text-center font-bold text-2xl'>Update Product</h1>
                         {/* Product Name */}
                         <div>
                             <input
@@ -188,14 +206,15 @@ const CreateProduct = () => {
                                 className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800"
                                 disabled={loading}
                             >
-                                {loading ? "creating product" : "create"}
+                                {loading ? "Updating product" : "Update"}
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
+            <Footer />
         </>
-    );
-};
+    )
+}
 
-export default CreateProduct;
+export default UpdateProduct

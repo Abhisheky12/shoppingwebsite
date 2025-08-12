@@ -101,6 +101,8 @@ const productSlice = createSlice({
                 state.products=[]
             })
 
+            //product detail
+
         builder.
             addCase(getProductDetails.pending, (state, action) => {
                 state.loading = true;

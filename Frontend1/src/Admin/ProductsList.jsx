@@ -90,10 +90,10 @@ const ProductList = () => {
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(product.createdAt).toLocaleString()}</td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                         <div className="flex items-center space-x-4">
-                                                            <Link to={`/admin/product/${product.id}`} className="group">
+                                                            <Link to={`/admin/product/${product._id}`} className="group">
                                                                 <Edit />
                                                             </Link>
-                                                            <button onClick={() => alert(`Delete product ${product.id}?`)} className="group">
+                                                            <button onClick={() => alert(`Delete product ${product._id}?`)} className="group">
                                                                 <Delete />
                                                             </button>
                                                         </div>
