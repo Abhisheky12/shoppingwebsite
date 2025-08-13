@@ -1,13 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import PageTitle from "../components/PageTitle";
 import { FaBox, FaShoppingCart, FaStar, FaDollarSign, FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAdminProducts, fetchOrders } from "../features/admin/adminSlice";
 
 const Dashboard = () => {
+
+    const { products, orders, totalAmount } = useSelector((state) => state.admin);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchAdminProducts());
+        dispatch(fetchOrders());
+    }, [dispatch])
+    const totalproduct=products.length;
+    const totalorders=orders.length;
+    const outOfStock=products.filter((product)=>product.stock===0).length;
+    const inStock=products.filter((product)=>product.stock>0).length;
+    const totalReviews=products.reduce((acc,product)=>acc+(product.reviews.length || 0),0);
+
+
+
     return (
         <>
-            <Navbar/>
+            <Navbar />
             <PageTitle title="Admin Dashboard" />
 
             <div className="flex min-h-screen">
@@ -56,7 +74,7 @@ const Dashboard = () => {
                             </div>
                             <div>
                                 <p className="text-gray-500 text-sm">Total Products</p>
-                                <h3 className="text-xl font-bold">4</h3>
+                                <h3 className="text-xl font-bold">{totalproduct}</h3>
                             </div>
                         </div>
 
@@ -67,7 +85,7 @@ const Dashboard = () => {
                             </div>
                             <div>
                                 <p className="text-gray-500 text-sm">Total Orders</p>
-                                <h3 className="text-xl font-bold">5</h3>
+                                <h3 className="text-xl font-bold">{totalorders}</h3>
                             </div>
                         </div>
 
@@ -78,7 +96,7 @@ const Dashboard = () => {
                             </div>
                             <div>
                                 <p className="text-gray-500 text-sm">Total Reviews</p>
-                                <h3 className="text-xl font-bold">15</h3>
+                                <h3 className="text-xl font-bold">{totalReviews}</h3>
                             </div>
                         </div>
 
@@ -89,7 +107,7 @@ const Dashboard = () => {
                             </div>
                             <div>
                                 <p className="text-gray-500 text-sm">Total Revenue</p>
-                                <h3 className="text-xl font-bold">1500/-</h3>
+                                <h3 className="text-xl font-bold">{totalAmount}/-</h3>
                             </div>
                         </div>
 
@@ -100,7 +118,7 @@ const Dashboard = () => {
                             </div>
                             <div>
                                 <p className="text-gray-500 text-sm">Out of Stock</p>
-                                <h3 className="text-xl font-bold">2</h3>
+                                <h3 className="text-xl font-bold">{outOfStock}</h3>
                             </div>
                         </div>
 
@@ -111,7 +129,7 @@ const Dashboard = () => {
                             </div>
                             <div>
                                 <p className="text-gray-500 text-sm">In Stock</p>
-                                <h3 className="text-xl font-bold">4</h3>
+                                <h3 className="text-xl font-bold">{inStock}</h3>
                             </div>
                         </div>
 

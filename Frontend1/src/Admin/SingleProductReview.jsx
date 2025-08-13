@@ -4,7 +4,7 @@ import PageTitle from '../components/PageTitle'
 import Footer from '../components/Footer'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { deleteReview, fetchProductReviews, removeErrors, removeSuccess } from '../features/admin/adminSlice'
+import { deleteReview, fetchProductReviews, removeErrors, removeMessage, removeSuccess } from '../features/admin/adminSlice'
 import { toast } from 'react-toastify'
 import { Delete } from '@mui/icons-material'
 
@@ -25,7 +25,7 @@ const SingleProductReview = () => {
         }
     }, [dispatch, error])
 
-    const handleDelete = (reviewId) => {
+    const handleDelete = (reviewId) =>{
         if (window.confirm("Are you sure you want to delete this review?")) {
             dispatch(deleteReview({ productid: id, reviewId }));
         }

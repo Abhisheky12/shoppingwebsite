@@ -9,38 +9,6 @@ import { getOrderDetails, removeErrors } from '../features/order/orderSlice';
 import { toast } from 'react-toastify';
 import Loader from '../components/loader';
 
-// Mock data to simulate fetching a single order's details
-// const mockOrderDetails = {
-//   shippingInfo: {
-//     address: 'Bannergatta, Nagarpur, 13, BD - 565',
-//     phone: '4556512345',
-//   },
-//   _id: '67f4fb7ede0e6d130e3d12',
-//   orderStatus: 'Processing',
-//   paymentInfo: {
-//     status: 'Paid',
-//   },
-//   paidAt: '2025-08-04T16:00:00.000Z', // Example date
-//   orderItems: [
-//     {
-//       name: 'Product5',
-//       quantity: 1,
-//       price: 500,
-//       image: 'https://placehold.co/100x100/e2e8f0/e2e8f0', // Placeholder image
-//       product: 'product_id_5',
-//     },
-//     {
-//       name: 'Product3',
-//       quantity: 1,
-//       price: 300,
-//       image: 'https://placehold.co/100x100/e2e8f0/e2e8f0', // Placeholder image
-//       product: 'product_id_3',
-//     },
-//   ],
-//   itemsPrice: 800,
-//   taxPrice: 144,
-//   totalPrice: 944,
-// };
 
 
 const OrderDetails = () => {
