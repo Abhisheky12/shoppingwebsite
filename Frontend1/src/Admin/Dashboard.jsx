@@ -27,7 +27,7 @@ const Dashboard = () => {
                         <div>
                             <p className="text-gray-400 text-sm uppercase">Users</p>
                             <ul className="space-y-2 mt-2">
-                                <li><Link to="" className="block hover:text-yellow-400">All Users</Link></li>
+                                <li><Link to="/admin/getallusers" className="block hover:text-yellow-400">All Users</Link></li>
                             </ul>
                         </div>
                         <div>

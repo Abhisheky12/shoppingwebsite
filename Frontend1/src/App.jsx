@@ -27,6 +27,8 @@ import Dashboard from './Admin/Dashboard';
 import ProductsList from './Admin/ProductsList';
 import CreateProduct from './Admin/CreateProduct';
 import UpdateProduct from './Admin/UpdateProduct';
+import UserList from './Admin/UserList';
+import UpdateRole from './Admin/UpdateRole';
 
 
 
@@ -68,8 +70,11 @@ const App = () => {
         <Route path="/admin/getallproduct" element={<ProtectedRoute element={<ProductsList />} adminOnly={true} />} />
         <Route path="/admin/createproduct" element={<ProtectedRoute element={<CreateProduct />} adminOnly={true} />} />
          <Route path="/admin/product/:updateId" element={<ProtectedRoute element={<UpdateProduct />} adminOnly={true} />} />
+         <Route path="/admin/getallusers" element={<UserList element={<UpdateProduct />} adminOnly={true} />} />
+         <Route path="/admin/user/:id" element={<UpdateRole element={<UpdateProduct />} adminOnly={true} />} />
       </Routes>
     </BrowserRouter>
+   
   )
 }
 
