@@ -456,14 +456,19 @@ const updateUserRole = async (req, res) => {
 //Admin delete the user
 const deleteUser = async (req, res) => {
     const id = req.params.id;
-    const user = await User.findByIdAndDelete(id);
+     const user = await User.findById(id);
+
+     //removing image form cloudinary 
+    const imageId=user.avatar.public_id;
+    await cloudinary.uploader.destroy(imageId);
+    const deleted = await User.findByIdAndDelete(id);
     if (!user) {
         res.status(404).json({
             success: true,
             messaage: "User does not exist"
         })
     }
-
+   
     res.status(200).json({
         success: true,
         messaage: "Successfully deleted the user"

@@ -5,47 +5,17 @@ import PageTitle from '../components/PageTitle'; // Adjust path as needed
 import Footer from '../components/Footer'; // Adjust path as needed
 import { Delete, Edit } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUsers } from '../features/admin/adminSlice';
+import { deleteUser, fetchUsers, removeErrors, removeSuccess } from '../features/admin/adminSlice';
 import { toast } from 'react-toastify';
 import Loader from '../components/loader';
 
-// --- Mock Data to simulate fetching users ---
-const mockUsers = [
-    {
-        _id: '1',
-        name: 'Khanam',
-        email: 'khanamtest@gmail.com',
-        role: 'admin',
-        createdAt: '2025-03-27T10:00:00.000Z',
-    },
-    {
-        _id: '2',
-        name: 'Seema',
-        email: 'seema@gmail.com',
-        role: 'admin',
-        createdAt: '2025-03-27T10:00:00.000Z',
-    },
-    {
-        _id: '3',
-        name: 'Sita',
-        email: 'sita@gmail.com',
-        role: 'user',
-        createdAt: '2025-03-27T10:00:00.000Z',
-    },
-    {
-        _id: '4',
-        name: 'Khaiser',
-        email: 'khaiserteaching@gmail.com',
-        role: 'user',
-        createdAt: '2025-03-30T10:00:00.000Z',
-    },
-];
+
 
 
 
 const UserList = () => {
 
-    const { users, loading, error } = useSelector((state) => state.admin);
+    const { users, loading, deleteError,deletesuccess,error } = useSelector((state) => state.admin);
     const dispatch = useDispatch();
     console.log(users);
 
@@ -62,12 +32,30 @@ const UserList = () => {
         }
     }, [dispatch, error])
 
-    if(loading){
-        return(
-            <Loader/>
+
+    const handleDelete = (userid) => {
+       const confirm=window.confirm("Are you sure to delete the user");
+       if(confirm){
+         dispatch(deleteUser(userid))
+       }
+    }
+    //handle error and success
+    useEffect(() => {
+        if (deleteError) {
+            toast.error(" failed to  delete user", { autoClose: 1000 });
+            dispatch(removeErrors());
+        }
+        if (deletesuccess ) {
+            toast.success("User deleted successfully", { autoClose: 1000 });
+            dispatch(removeSuccess());
+        }
+    }, [deleteError, dispatch, deletesuccess]);
+
+    if (loading) {
+        return (
+            <Loader />
         )
     }
-
 
     return (
         <>
@@ -111,7 +99,7 @@ const UserList = () => {
                                                     <Link to={`/admin/user/${user._id}`} className="group">
                                                         <Edit />
                                                     </Link>
-                                                    <button onClick={() => alert(`Delete user ${user._id}?`)} className="group">
+                                                    <button onClick={() => handleDelete(user._id)} className="group">
                                                         <Delete />
                                                     </button>
                                                 </div>

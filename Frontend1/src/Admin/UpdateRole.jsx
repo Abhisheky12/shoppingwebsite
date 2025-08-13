@@ -2,17 +2,12 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import PageTitle from '../components/PageTitle'
 import Footer from '../components/Footer'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSingleUser } from '../features/admin/adminSlice';
+import { getSingleUser, removeErrors, removeSuccess, updateRole } from '../features/admin/adminSlice';
+import { toast } from 'react-toastify';
 
-// Mock data to simulate fetching a user's details
-const mockUser = {
-    _id: '1',
-    name: 'Seema',
-    email: 'seema@gmail.com',
-    role: 'admin',
-};
+
 
 const UpdateRole = () => {
 
@@ -22,9 +17,9 @@ const UpdateRole = () => {
     const [role, setRole] = useState('');
 
     const { user, success, loading, error } = useSelector((state) => state.admin);
-    console.log(user);
+    
 
-
+    const navigate=useNavigate();
     const dispatch = useDispatch();
 
     const { id } = useParams(); // Get user ID from URL in a real app
@@ -33,7 +28,7 @@ const UpdateRole = () => {
     // Simulating API call
     useEffect(() => {
         dispatch(getSingleUser(id));
-    }, [dispatch])
+    }, [dispatch,id])
 
 
     // render  previous data
@@ -47,10 +42,21 @@ const UpdateRole = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-
+        dispatch(updateRole({id,role}));
     };
 
+   //handle error and success
+      useEffect(() => {
+            if (error) {
+                toast.error(error, { autoClose: 1000 });
+                dispatch(removeErrors());
+            }
+            if (success) {
+                toast.success("User role updated successfully", { autoClose: 1000 });
+                dispatch(removeSuccess());
+                navigate("/admin/getallusers")
+            }
+        }, [error, dispatch, success]);
 
     return (
         <>

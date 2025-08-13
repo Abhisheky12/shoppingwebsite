@@ -70,8 +70,8 @@ const App = () => {
         <Route path="/admin/getallproduct" element={<ProtectedRoute element={<ProductsList />} adminOnly={true} />} />
         <Route path="/admin/createproduct" element={<ProtectedRoute element={<CreateProduct />} adminOnly={true} />} />
          <Route path="/admin/product/:updateId" element={<ProtectedRoute element={<UpdateProduct />} adminOnly={true} />} />
-         <Route path="/admin/getallusers" element={<UserList element={<UpdateProduct />} adminOnly={true} />} />
-         <Route path="/admin/user/:id" element={<UpdateRole element={<UpdateProduct />} adminOnly={true} />} />
+         <Route path="/admin/getallusers" element={<ProtectedRoute element={<UserList />} adminOnly={true} />} />
+         <Route path="/admin/user/:id" element={<ProtectedRoute element={<UpdateRole />} adminOnly={true} />} />
       </Routes>
     </BrowserRouter>
    
