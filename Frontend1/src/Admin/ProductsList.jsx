@@ -15,7 +15,7 @@ const ProductList = () => {
 
 
 
-    const { products, loading, error,deleterror,deletesuccess } = useSelector((state) => state.admin);
+    const { products, loading, error,deletError,deletesuccess } = useSelector((state) => state.admin);
     console.log(products);
 
     const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const ProductList = () => {
 
     //handle delete error and success
     useEffect(() => {
-        if (deleterror) {
+        if (deletError) {
             toast.error("Failed to delete products", { autoClose: 1000 });
             dispatch(removeErrors());
         }
@@ -40,9 +40,11 @@ const ProductList = () => {
             toast.success("product deleted successfully", { autoClose: 1000 });
             dispatch(removeErrors());
         }
-    }, [dispatch,deleterror,deletesuccess])
+    }, [dispatch,deletError,deletesuccess])
 
 
+
+    //handle prodcut delete
    const handleDelete=(productId)=>{
     const isConfirmed=window.confirm("Are you sure to delete this product?")
     if(isConfirmed){

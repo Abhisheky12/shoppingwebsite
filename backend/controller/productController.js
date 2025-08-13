@@ -199,7 +199,7 @@ const updateProduct = async (req, res) => {
 
         return res.status(404).json({
             success: false,
-            message: "some error occured"
+            message:error.message
         })
 
     }
@@ -316,25 +316,33 @@ const createReviewForProduct = async (req, res) => {
 
 }
 //getting user review
+//getting user review
 const getProductReviews = async (req, res) => {
-    const id = req.query.id;
-    const product = await Product.findById(id);
-    if (!product) {
-        return res.status(404).json({
+    try { // <-- ADD TRY
+        const product = await Product.findById(req.params.id); // Use req.query.id if it's a query param
+
+        if (!product) {
+            return res.status(404).json({
+                success: false,
+                message: "Product not found"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            reviews: product.reviews
+        });
+
+    } catch (error) { // <-- ADD CATCH
+        return res.status(500).json({
             success: false,
-            message: "Product not found"
+            message: "Server error: " + error.message
         });
     }
-
-    return res.status(200).json({
-        success: true,
-        reviews: product.reviews
-    });
-
-}
+};
 //Deleting review
 const deleteReview = async (req, res) => {
-    const product = await Product.findById(req.query.productId);
+    const product = await Product.findById(req.query.productid);
     if (!product) {
         return res.status(404).json({
             success: false,
@@ -346,20 +354,16 @@ const deleteReview = async (req, res) => {
 
     //after deleting review again calcualate no.of reviews remains
 
-    let avg = 0;
-    reviews.forEach(rev =>
-        avg += rev.rating
-    )
+  
     product.reviews = reviews;
-    product.ratings = reviews.length > 0 ? Number((avg / reviews.length).toFixed(1)) : 0;
     product.numofReviews = reviews.length;
 
     await product.save({ validateBeforeSave: false });
 
 
     res.status(200).json({
-        success: true,
-        message: "Review deleted successfully"
+        success:true,
+        message:"Review deleted successfully"
     });
 
 }

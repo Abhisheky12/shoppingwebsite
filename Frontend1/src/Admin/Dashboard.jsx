@@ -33,13 +33,13 @@ const Dashboard = () => {
                         <div>
                             <p className="text-gray-400 text-sm uppercase">Orders</p>
                             <ul className="space-y-2 mt-2">
-                                <li><Link to="" className="block hover:text-yellow-400">All Orders</Link></li>
+                                <li><Link to="/admin/orders" className="block hover:text-yellow-400">All Orders</Link></li>
                             </ul>
                         </div>
                         <div>
                             <p className="text-gray-400 text-sm uppercase">Reviews</p>
                             <ul className="space-y-2 mt-2">
-                                <li><Link to="" className="block hover:text-yellow-400">All Reviews</Link></li>
+                                <li><Link to="/admin/review" className="block hover:text-yellow-400">All Reviews</Link></li>
                             </ul>
                         </div>
                     </nav>

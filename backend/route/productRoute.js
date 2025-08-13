@@ -18,8 +18,8 @@ productRouter.get("/admin/getallproduct",getAdminProducts);
 //creating and updating review  
 productRouter.put("/createreview",verifyUserAuth,createReviewForProduct);
 //getProduct review
-productRouter.get("/review",getProductReviews);
+productRouter.get("/admin/review/:id",verifyUserAuth,roleBasedAccess("admin"),getProductReviews);
 //Deleting review  
-productRouter.delete("/review",deleteReview);
+productRouter.delete("/admin/review",verifyUserAuth,roleBasedAccess("admin"),deleteReview);
 
 module.exports=productRouter;

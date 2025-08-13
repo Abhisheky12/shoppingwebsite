@@ -112,6 +112,7 @@ const updateOrderStatus = async (req, res) => {
 
     return res.status(200).json({
         success: true,
+        message:"Order status updated successfully",
         order
     })
 
@@ -143,16 +144,16 @@ const deleteOrder = async (req, res) => {
 
     if (order.orderStatus !== "Delivered") {
 
-        res.status(200).json({
+        res.status(404).json({
             success: true,
-            message: "This ordfer is under Processing and cannot deleted"
+            message: "This order is under Processing and cannot deleted"
         })
 
     }
 
     await Order.deleteOne({ _id: req.params.id });
 
-    res.status(404).json({
+    res.status(200).json({
         success: true,
         message: "Order deleted successfully"
     })

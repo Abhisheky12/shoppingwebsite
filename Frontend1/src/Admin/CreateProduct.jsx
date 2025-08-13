@@ -27,6 +27,7 @@ const CreateProduct = () => {
         setImagePreviews([]);
 
         files.forEach((file) => {
+
             const reader = new FileReader();
             reader.onload = () => {
                 if (reader.readyState === 2) {
@@ -54,14 +55,6 @@ const CreateProduct = () => {
 
         dispatch(createProducts(myForm));
 
-        setProductName("");
-        setPrice("");
-        setDescription("");
-        setCategory("");
-        setStock("");
-        setImages("");
-        setImagePreviews("");
-
 
     };
 
@@ -74,6 +67,13 @@ const CreateProduct = () => {
         if (success) {
             toast.success("Product created successfully", { autoClose: 1000 });
             dispatch(removeSuccess());
+            setProductName("");
+            setPrice("");
+            setDescription("");
+            setCategory("");
+            setStock("");
+            setImages([]);
+            setImagePreviews([]);
         }
     }, [error, dispatch, success]);
 
