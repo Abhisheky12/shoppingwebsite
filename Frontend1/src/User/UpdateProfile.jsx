@@ -20,17 +20,11 @@ const UpdateProfile = () => {
 
 
   const profileImageUpdate = (e) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setAvatarPreview(reader.result);
-        setAvatar(reader.result)
-      }
-    }
-    reader.onerror = () => {
-      toast.error("Error while reading file")
-    }
-    reader.readAsDataURL(e.target.files[0]);
+      const file = e.target.files[0];
+            if (file) {
+                setAvatar(file); // Store the actual file
+                setAvatarPreview(URL.createObjectURL(file)); // Create a temporary preview
+            }
   }
 
 

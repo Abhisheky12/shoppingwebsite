@@ -11,11 +11,12 @@ const cloudinary = require("cloudinary").v2;
 //register
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password, avatar } = req.body;
+        const { name, email, password } = req.body;
 
+        const Avatar=req.files?.avatar;
 
         //validting field
-        if (!name || !email || !password || !avatar) {
+        if (!name || !email || !password || !Avatar) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required"
@@ -31,7 +32,7 @@ const registerUser = async (req, res) => {
         }
 
 
-        const myCloud = await cloudinary.uploader.upload(avatar, {
+        const myCloud = await cloudinary.uploader.upload(req.files?.avatar.tempFilePath, {
             folder: "avatars",
             width: 150,
             crop: "scale"
@@ -331,14 +332,15 @@ const updateProfile = async (req, res) => {
 
     try {
 
-        const { name, email, avatar } = req.body;
+        const { name, email} = req.body;
         const updateUserDetails = {
             name,
             email
         }
+        
 
         //  Handle Cloudinary upload ONLY if a new avatar was submitted
-        if (avatar) {
+        if (req.files?.avatar) {
             const currentUser = await User.findById(req.user._id);
 
             // Destroy the old image if it exists
@@ -348,7 +350,7 @@ const updateProfile = async (req, res) => {
             }
 
             // Upload the new image
-            const myCloud = await cloudinary.uploader.upload(avatar, {
+            const myCloud = await cloudinary.uploader.upload(req.files?.avatar.tempFilePath, {
                 folder: "avatars",
                 width: 150,
                 crop: "scale",

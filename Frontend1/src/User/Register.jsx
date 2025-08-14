@@ -21,25 +21,22 @@ const Register = () => {
 
     const { success, loading, error } = useSelector((state) => state.user);
     const dispatch = useDispatch();
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
 
 
+    // Handle input changes
     const registerDataChange = (e) => {
         if (e.target.name === "avatar") {
-            const reader = new FileReader();
-            reader.onload = () => {
-                if (reader.readyState === 2) {
-                    setAvatarpreview(reader.result);
-                    setAvatar(reader.result)
-                }
+            const file = e.target.files[0];
+            if (file) {
+                setAvatar(file); // Store the actual file
+                setAvatarpreview(URL.createObjectURL(file)); // Create a temporary preview
             }
-            reader.readAsDataURL(e.target.files[0]);
+        } else {
+            setUser({ ...user, [e.target.name]: e.target.value });
         }
-        else {
-            setUser({ ...user, [e.target.name]: e.target.value })
-        }
-    }
+    };
 
     //function for submitting form
     const registerSubmit = (e) => {
@@ -51,7 +48,7 @@ const Register = () => {
         const myForm = new FormData();
         myForm.set("name", name);
         myForm.set("email", email);
-        myForm.set("password",password);
+        myForm.set("password", password);
         myForm.set("avatar", avatar);
 
         //dispatching register function
@@ -153,10 +150,15 @@ const Register = () => {
                     <div>
                         <button
                             type="submit"
-                            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            disabled={loading}
+                            className={`group relative w-full flex justify-center py-3 px-4 border border-transparent 
+                               text-sm font-medium rounded-md text-white 
+                              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                             ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"}`}
                         >
-                            {loading?"Creating... Account":"Create Account"}
+                            {loading ? "Creating... Account" : "Create Account"}
                         </button>
+
                     </div>
 
                     {/* Link to Sign In page */}

@@ -42,9 +42,12 @@ const paymentrouter=require("./route/paymentRoutes");
 //middleware
 
 app.use(cookieParser());  // parse cookies from the incoming HTTP requests, and make them easily accessible via req.cookies.
-app.use(express.json({ limit: '20mb' })); // Parses incoming JSON request bodies and makes them available as req.body.
-app.use(fileUpload());
-app.use(express.urlencoded({ limit: '20mb',extended: true })); // For parsing application/x-www-form-urlencoded
+app.use(express.json()); // Parses incoming JSON request bodies and makes them available as req.body.
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: '/tmp/'
+}));
+app.use(express.urlencoded({extended: true })); // For parsing application/x-www-form-urlencoded
 
 //routes
 app.use("/api/v1",authRouter);

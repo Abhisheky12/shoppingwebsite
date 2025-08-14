@@ -32,21 +32,8 @@ const UpdateProduct = () => {
 
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files);
-
-        setImages([]);
-        setImagePreviews([]);
-
-        files.forEach((file) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                if (reader.readyState === 2) {
-                    setImagePreviews((old) => [...old, reader.result]);
-                    setImages((old) => [...old, reader.result]);
-                }
-            };
-
-            reader.readAsDataURL(file);
-        });
+        setImages(files); // store the File objects
+        setImagePreviews(files.map(file => URL.createObjectURL(file))); // preview URLs
     };
 
     //api call
@@ -217,7 +204,7 @@ const UpdateProduct = () => {
                         <div>
                             <button
                                 type="submit"
-                                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800"
+                                className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800  ${loading ? "bg-gray-400 cursor-not-allowed" :""} `}
                                 disabled={loading}
                             >
                                 {loading ? "Updating product" : "Update"}

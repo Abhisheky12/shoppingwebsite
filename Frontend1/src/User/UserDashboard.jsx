@@ -27,7 +27,7 @@ const UserDashboard = ({ user }) =>{
   }
   const handleLogout = () => {
     dispatch(logout()).unwrap().then(() => {
-      toast.success("Logout successful");
+      toast.success("Logout successful",{autoClose:500});
       dispatch(removeSuccess());
       navigate("/login");
     })

@@ -1,41 +1,53 @@
 const { Product } = require("../modals/productModel");
 const { APIFunctionality } = require("../utils/apiFunctionality");
 const cloudinary = require("cloudinary").v2;
+ const fs = require('fs');
 //create product (admin)
 const createProducts = async (req, res) => {
-    try {
-        let image = [];
-        if (typeof req.body.images === "string") {
-            image.push(req.body.images)
+    
+     try {
+        let images = [];
+
+        if (req.files && req.files.images) {
+            if (Array.isArray(req.files.images)) {
+                images = req.files.images; // multiple files
+            } else {
+                images.push(req.files.images); // single file
+            }
+        } else {
+            return res.status(400).json({
+                success: false,
+                message: "No images uploaded"
+            });
         }
-        else {
-            image = req.body.images
-        }
+
         const imagelinks = [];
-        for (let i = 0; i < image.length; i++) {
-            const result = await cloudinary.uploader.upload(image[i], {
+        for (let i = 0; i < images.length; i++){
+            const result = await cloudinary.uploader.upload(images[i].tempFilePath, {
                 folder: "products"
-            })
+            });
             imagelinks.push({
                 public_id: result.public_id,
                 url: result.secure_url
-            })
+            });
+             fs.unlinkSync(images[i].tempFilePath);
         }
-        req.body.image = imagelinks;
 
-        //extracting user id to store in product body in user field as in productmodel
+        req.body.image = imagelinks;
         req.body.user = req.user._id;
+
         const product = await Product.create(req.body);
+
         return res.status(201).json({
             success: true,
             product
         });
-    }
-    catch (error) {
-        return res.status(404).json({
+
+    } catch (error) {
+        return res.status(500).json({
             success: false,
             message: error.message
-        })
+        });
     }
 }
 
@@ -139,69 +151,138 @@ const getAllProducts = async (req, res) => {
 
 //update product
 const updateProduct = async (req, res) => {
-    try {
+    // try {
 
-        const id = req.params.id;
-        let product = await Product.findById(id)
+    //     const id = req.params.id;
+    //     let product = await Product.findById(id)
 
-        let image = [];
-        if (typeof req.body.images === "string") {
-            image.push(req.body.images)
-        }
-         else if (Array.isArray(req.body.images)) {
-            image = req.body.images;
-        }
+    //     let image = [];
+    //     if (typeof req.body.images === "string") {
+    //         image.push(req.body.images)
+    //     }
+    //      else if (Array.isArray(req.body.images)) {
+    //         image = req.body.images;
+    //     }
         
-        const imagelinks = [];
-        if (image.length > 0) {
-            for (let i = 0; i < product.image.length; i++) {
-                await cloudinary.uploader.destroy(product.image[i].public_id)
-            }
-            for (let i = 0; i < image.length; i++) {
-                const result = await cloudinary.uploader.upload(image[i], {
-                    folder: "products"
-                })
-                imagelinks.push({
-                    public_id: result.public_id,
-                    url: result.secure_url
-                })
-            }
-             req.body.image = imagelinks;
-        }
+    //     const imagelinks = [];
+    //     if (image.length > 0) {
+    //         for (let i = 0; i < product.image.length; i++) {
+    //             await cloudinary.uploader.destroy(product.image[i].public_id)
+    //         }
+    //         for (let i = 0; i < image.length; i++) {
+    //             const result = await cloudinary.uploader.upload(image[i], {
+    //                 folder: "products"
+    //             })
+    //             imagelinks.push({
+    //                 public_id: result.public_id,
+    //                 url: result.secure_url
+    //             })
+    //         }
+    //          req.body.image = imagelinks;
+    //     }
 
        
 
-        //extracting user id to store in product body in user field as in productmodel
-        req.body.user = req.user._id;
+    //     //extracting user id to store in product body in user field as in productmodel
+    //     req.body.user = req.user._id;
 
 
-        product = await Product.findByIdAndUpdate(id, req.body, {
-            new: true,
-            runValidators: true
-        })
+    //     product = await Product.findByIdAndUpdate(id, req.body, {
+    //         new: true,
+    //         runValidators: true
+    //     })
+
+    //     if (!product) {
+    //         return res.status(404).json({
+    //             success: false,
+    //             message: "Product not found"
+    //         })
+    //     }
+
+
+    //     return res.status(200).json({
+    //         success: true,
+    //         product
+    //     })
+
+
+    // }
+    // catch (error) {
+
+    //     return res.status(404).json({
+    //         success: false,
+    //         message:error.message
+    //     })
+
+    // }
+
+     try {
+        const id = req.params.id;
+        let product = await Product.findById(id);
 
         if (!product) {
             return res.status(404).json({
                 success: false,
                 message: "Product not found"
-            })
+            });
         }
 
+        let images = [];
+
+        // if only one image uploaded, req.files.images will be an object
+        if (req.files && req.files.images) {
+            if (Array.isArray(req.files.images)) {
+                images = req.files.images;
+            } else {
+                images.push(req.files.images);
+            }
+        }
+
+        // If new images are uploaded, first delete old ones from cloudinary
+        if (images.length > 0) {
+            for (let i = 0; i < product.image.length; i++) {
+                await cloudinary.uploader.destroy(product.image[i].public_id);
+            }
+
+            // Upload new images using tempFilePath
+            const imagelinks = [];
+            for (let i = 0; i < images.length; i++) {
+                const result = await cloudinary.uploader.upload(images[i].tempFilePath, {
+                    folder: "products"
+                });
+
+                imagelinks.push({
+                    public_id: result.public_id,
+                    url: result.secure_url
+                });
+
+                // Remove the temp file from server after upload
+                fs.unlinkSync(images[i].tempFilePath);
+            }
+
+            // Assign new image links to req.body
+            req.body.image = imagelinks;
+        }
+
+        // Store user id in product data
+        req.body.user = req.user._id;
+
+        // Update product
+        product = await Product.findByIdAndUpdate(id, req.body, {
+            new: true,
+            runValidators: true
+        });
 
         return res.status(200).json({
             success: true,
             product
-        })
+        });
 
-
-    }
-    catch (error) {
-
-        return res.status(404).json({
+    } catch (error) {
+        return res.status(500).json({
             success: false,
-            message:error.message
-        })
-
+            message: error.message
+        });
     }
 }
 

@@ -235,7 +235,7 @@ const adminSlice = createSlice({
             })
             .addCase(createProducts.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload?.message || "Product update failed";
+                state.error = action.payload?.message || "Product creation failed";
 
             })
         //update product

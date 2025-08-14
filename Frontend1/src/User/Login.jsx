@@ -26,7 +26,7 @@ function Login() {
       //error message
         useEffect(() => {
             if (error) {
-                toast.error(error, { position: "top-center", autoClose: 1000 });
+                toast.error(error, { position: "top-center", autoClose: 500 });
                 dispatch(removeErrors());
             }
         }, [dispatch, error])
@@ -34,7 +34,7 @@ function Login() {
         //success message 
         useEffect(() => {
             if (success) {
-                toast.success("Login Successful", { position: "top-center", autoClose: 1000,toastId:"login" });
+                toast.success("Login Successful", { position: "top-center", autoClose: 500,toastId:"login" });
                 dispatch(removeSuccess());
              
             }
@@ -83,12 +83,16 @@ function Login() {
                     </div>
 
                     {/* Form submission button */}
-                    <button
-                        type="submit"
-                        className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                        Sign In
-                    </button>
+                     <button
+                            type="submit"
+                            disabled={loading}
+                            className={`group relative w-full flex justify-center py-3 px-4 border border-transparent 
+                               text-sm font-medium rounded-md text-white 
+                              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                             ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"}`}
+                        >
+                            {loading ? "Loging..." : "Login"}
+                        </button>
 
                     {/* Links */}
                     <div className="text-sm text-center text-gray-600 space-y-2">
