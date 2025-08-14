@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 import CartEmpty from './Cartempty';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Loader from '../components/loader';
 
 const Cart = () => {
 

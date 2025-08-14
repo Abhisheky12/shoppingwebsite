@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { removeErrors, removeSuccess, removeupdateSuccess, updatePassword } from '../features/user/userSlice';
 import { toast } from 'react-toastify';
 import Navbar from '../components/Navbar';
-import Loader from '../components/loader';
+import Loader from '../components/Loader';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const UpdatePassword = () => {
 
@@ -13,6 +14,9 @@ const UpdatePassword = () => {
   const {updateSuccess,loading,error}=useSelector((state=>state.user));
   const dispatch=useDispatch();
   const navigate=useNavigate();
+  const[showpassword1,setShowpassword1]=useState(false)
+  const[showpassword2,setShowpassword2]=useState(false)
+  const[showpassword3,setShowpassword3]=useState(false)
 
 
   const [oldPassword, setOldPassword] = useState("");
@@ -65,7 +69,7 @@ const UpdatePassword = () => {
               <input
                 id="old-password"
                 name="oldPassword"
-                type="password"
+                type={showpassword1?"text":"password"}
                 className="w-full px-4 py-3 text-gray-700 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
                 placeholder="Old Password"
                 required
@@ -75,14 +79,9 @@ const UpdatePassword = () => {
               <button
                 type="button"
                 className="absolute inset-y-0 right-0 flex items-center px-4 text-gray-600"
+                onClick={()=>setShowpassword1(!showpassword1)}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none"
-                  viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
+               {showpassword1?<Visibility/>:<VisibilityOff/>}
               </button>
             </div>
 
@@ -91,7 +90,7 @@ const UpdatePassword = () => {
               <input
                 id="new-password"
                 name="newPassword"
-                type="password"
+               type={showpassword2?"text":"password"}
                 className="w-full px-4 py-3 text-gray-700 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
                 placeholder="New Password"
                 required
@@ -101,14 +100,9 @@ const UpdatePassword = () => {
               <button
                 type="button"
                 className="absolute inset-y-0 right-0 flex items-center px-4 text-gray-600"
+                onClick={()=>setShowpassword2(!showpassword2)}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none"
-                  viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
+               {showpassword2?<Visibility/>:<VisibilityOff/>}
               </button>
             </div>
 
@@ -117,7 +111,7 @@ const UpdatePassword = () => {
               <input
                 id="confirm-password"
                 name="confirmPassword"
-                type="password"
+                type={showpassword3?"text":"password"}
                 className="w-full px-4 py-3 text-gray-700 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent"
                 placeholder="Confirm Password"
                 required
@@ -127,14 +121,9 @@ const UpdatePassword = () => {
               <button
                 type="button"
                 className="absolute inset-y-0 right-0 flex items-center px-4 text-gray-600"
+                onClick={()=>setShowpassword3(!showpassword3)}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none"
-                  viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
+                {showpassword3?<Visibility/>:<VisibilityOff/>}
               </button>
             </div>
 

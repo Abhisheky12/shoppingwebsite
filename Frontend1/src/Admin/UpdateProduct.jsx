@@ -6,7 +6,6 @@ import PageTitle from '../components/PageTitle'; // Assuming you have this compo
 import { useDispatch, useSelector } from 'react-redux';
 import { createProducts, removeErrors, removeSuccess, updateProducts } from '../features/admin/adminSlice';
 import { toast } from 'react-toastify';
-import Loader from '../components/loader';
 import Footer from '../components/Footer';
 import { useParams } from 'react-router-dom';
 import { getProductDetails } from '../features/products/productSlice';

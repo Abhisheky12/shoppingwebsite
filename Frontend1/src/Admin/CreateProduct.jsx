@@ -4,7 +4,6 @@ import PageTitle from '../components/PageTitle'; // Assuming you have this compo
 import { useDispatch, useSelector } from 'react-redux';
 import { createProducts, removeCreatesuccess, removeErrors, removeSuccess } from '../features/admin/adminSlice';
 import { toast } from 'react-toastify';
-import Loader from '../components/loader';
 
 const CreateProduct = () => {
     const [name, setProductName] = useState('');

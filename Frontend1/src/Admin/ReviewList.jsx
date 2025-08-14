@@ -5,7 +5,7 @@ import PageTitle from '../components/PageTitle';
 import Footer from '../components/Footer';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAdminProducts } from '../features/admin/adminSlice';
-import Loader from '../components/loader';
+import Loader from '../components/Loader';
 
 
 

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeErrors, removeSuccess, removeupdateSuccess, updateProfile } from '../features/user/userSlice';
-import Loader from '../components/loader';
+import Loader from '../components/Loader';
 
 const UpdateProfile = () => {
 

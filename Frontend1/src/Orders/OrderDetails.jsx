@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrderDetails, removeErrors } from '../features/order/orderSlice';
 import { toast } from 'react-toastify';
-import Loader from '../components/loader';
+import Loader from '../components/Loader';
 
 
 

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import PageTitle from '../components/PageTitle';
 import { Country, State, City }  from 'country-state-city';
-import Checkoutpath from './Checkoutpath';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';

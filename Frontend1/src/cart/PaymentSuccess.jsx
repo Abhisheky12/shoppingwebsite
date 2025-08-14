@@ -4,7 +4,6 @@ import Navbar from '../components/Navbar';
 import PageTitle from "../components/PageTitle";
 import Footer from "../components/Footer";
 import { useDispatch, useSelector } from 'react-redux';
-import CartItems from './CartItem';
 import { toast } from 'react-toastify';
 import { createOrder, removeSuccess } from '../features/order/orderSlice';
 import { clearCart } from '../features/cart/cartSlice';
