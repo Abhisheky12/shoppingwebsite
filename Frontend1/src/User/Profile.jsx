@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import {useSelector} from "react-redux"
-import Loader from '../components/Loader';
+import Loader from '../components/loader';
 import PageTitle from '../components/PageTitle';
 
 function Profile() {
