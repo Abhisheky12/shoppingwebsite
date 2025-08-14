@@ -3,7 +3,6 @@ import Navbar from '../components/Navbar';
 import PageTitle from '../components/PageTitle';
 import Footer from '../components/Footer';
 import { useSelector } from 'react-redux';
-import CartEmpty from './Cartempty';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
