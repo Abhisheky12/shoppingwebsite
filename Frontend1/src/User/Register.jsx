@@ -19,7 +19,7 @@ const Register = () => {
     // for Send image data to backend
     const [avatar, setAvatar] = useState("");
     // for Display image in the form
-    const [avatarPreview, setAvatarpreview] = useState("./public/images/profile.jpeg");
+    const [avatarPreview, setAvatarpreview] = useState("/images/profile.jpeg");
     const { name, email, password } = user;
 
     const { success, loading, error } = useSelector((state) => state.user);

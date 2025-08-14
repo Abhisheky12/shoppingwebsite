@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import PageTitle from '../components/PageTitle'; // Assuming you have this component
 import { useDispatch, useSelector } from 'react-redux';
-import { createProducts, removeErrors, removeSuccess } from '../features/admin/adminSlice';
+import { createProducts, removeCreatesuccess, removeErrors, removeSuccess } from '../features/admin/adminSlice';
 import { toast } from 'react-toastify';
 import Loader from '../components/loader';
 
@@ -16,7 +16,7 @@ const CreateProduct = () => {
     const [imagePreviews, setImagePreviews] = useState([]);
 
     const categories = ["GLASS", "SHIRT", "MOBILE", "DRESS", "TV", "RING", "SHOES", "WATCH", "BAG", "PANT", "T-SHIRT"];
-    const { success, loading, error } = useSelector((state) => state.admin);
+    const {  createsuccess, loading, error } = useSelector((state) => state.admin);
     const dispatch = useDispatch();
 
 
@@ -51,9 +51,9 @@ const CreateProduct = () => {
             toast.error(error, { autoClose: 1000 });
             dispatch(removeErrors());
         }
-        if (success) {
+        if ( createsuccess) {
             toast.success("Product created successfully", { autoClose: 1000 });
-            dispatch(removeSuccess());
+            dispatch(removeCreatesuccess());
             setProductName("");
             setPrice("");
             setDescription("");
@@ -62,7 +62,7 @@ const CreateProduct = () => {
             setImages([]);
             setImagePreviews([]);
         }
-    }, [error, dispatch, success]);
+    }, [error, dispatch,  createsuccess]);
 
 
 

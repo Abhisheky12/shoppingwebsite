@@ -180,6 +180,7 @@ const adminSlice = createSlice({
         deleteLoading: false,
         deleteError: null,
         deletesuccess: null,
+        createsuccess:null,
         users: [],
         user: {},
         orders: [],
@@ -202,6 +203,9 @@ const adminSlice = createSlice({
         },
         removeMessage: (state) => {
             state.message = null;
+        },
+        removeCreatesuccess: (state) => {
+            state.createsuccess = null;
         }
     },
     extraReducers: (builder) => {
@@ -229,7 +233,7 @@ const adminSlice = createSlice({
             })
             .addCase(createProducts.fulfilled, (state, action) => {
                 state.loading = false;
-                state.success = action.payload.success;
+                state.createsuccess = action.payload.createsuccess;
                 state.products.push(action.payload.product);
 
             })
@@ -423,5 +427,5 @@ const adminSlice = createSlice({
     }
 })
 
-export const { removeErrors, removeSuccess, removeDelete, removeMessage } = adminSlice.actions;
+export const { removeErrors, removeSuccess, removeDelete, removeMessage, removeCreatesuccess } = adminSlice.actions;
 export default adminSlice.reducer;

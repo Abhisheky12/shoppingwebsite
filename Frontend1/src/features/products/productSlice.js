@@ -70,7 +70,8 @@ const productSlice = createSlice({
         totalPages:0,
         limit:0,
         reviewSuccess:false,
-        reviewLoading:false
+        reviewLoading:false,
+        
 
     },
     reducers: {
