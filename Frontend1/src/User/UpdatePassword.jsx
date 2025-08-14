@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { removeErrors, removeSuccess, removeupdateSuccess, updatePassword } from '../features/user/userSlice';
 import { toast } from 'react-toastify';
 import Navbar from '../components/Navbar';
-import Loader from '../components/Loader';
+import Loader from '../components/loader';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const UpdatePassword = () => {
