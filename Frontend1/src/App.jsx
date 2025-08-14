@@ -1,16 +1,13 @@
 import React, { useEffect } from 'react'
 import Home from "./pages/Home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Footer from './components/Footer';
 import ProductDetails from './pages/ProductDetails';
 import Products from './pages/Products';
 import Register from './User/Register';
 import Login from './User/Login';
 import { useDispatch, useSelector } from 'react-redux';
-import UserDashboard from './User/userDashboard';
 import { loadUser } from './features/user/userSlice';
 import Profile from './User/Profile';
-import ProtechtedRoute from './components/ProtectedRoute';
 import ProtectedRoute from './components/ProtectedRoute';
 import UpdateProfile from './User/UpdateProfile';
 import UpdatePassword from './User/UpdatePassword';
