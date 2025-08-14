@@ -99,15 +99,15 @@ const updateOrderStatus = async (req, res) => {
             message: "The order is already delivered"
         })
     }
-    //This runs all updateQuantity() calls in parallel, and waits for all to finish before moving on.
-    await Promise.all(order.orderItems.map(item => updateQuantity(item.product, item.quantity)
-    ))
-
 
     order.orderStatus = req.body.status;
+
     if (order.orderStatus === "Delivered") {
-        order.deliveredAt = Date.now();
-    }
+    // Decrease stock only when marking as delivered
+    await Promise.all(order.orderItems.map(item => updateQuantity(item.product, item.quantity)));
+    order.deliveredAt = Date.now();
+}
+
     await order.save({ validateBeforeSave: false });
 
     return res.status(200).json({
@@ -127,7 +127,7 @@ async function updateQuantity(id, quantity) {
         })
     }
     product.stock = product.stock - quantity;
-
+    await product.save({ validateBeforeSave: false });
 
 }
 

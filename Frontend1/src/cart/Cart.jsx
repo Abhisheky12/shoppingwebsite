@@ -7,11 +7,12 @@ import { useSelector } from 'react-redux';
 import CartEmpty from './Cartempty';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Loader from '../components/loader';
 
 const Cart = () => {
 
     const { cartItems } = useSelector((state) => state.cart);
-    const { isAuthenticated } = useSelector((state) => state.user);
+    const { isAuthenticated,loading } = useSelector((state) => state.user);
     const navigate=useNavigate();
     //cart total
     const subTotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
@@ -28,6 +29,7 @@ const Cart = () => {
             navigate("/shipping");
         }
     }
+   
 
 
     return (

@@ -142,7 +142,9 @@ const userSlice = createSlice({
         error: null,
         success: false,
         isAuthenticated: localStorage.getItem("isAuthenticated") === "true",
-        message: null
+        message: null,
+        updateSuccess:null,
+        
     },
     reducers: {
         removeErrors: (state) => {
@@ -150,6 +152,9 @@ const userSlice = createSlice({
         },
         removeSuccess: (state) => {
             state.success = null;
+        },
+        removeupdateSuccess: (state) => {
+            state.updateSuccess = null;
         },
     },
     extraReducers: (builder) => {
@@ -264,7 +269,7 @@ const userSlice = createSlice({
             .addCase(updateProfile.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = null;
-                state.success = action.payload?.success;
+                state.updateSuccess = action.payload?.success;
                 state.user = action.payload?.user || null;
                 state.message = action.payload?.message;
             })
@@ -281,7 +286,7 @@ const userSlice = createSlice({
             .addCase(updatePassword.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = null;
-                state.success = action.payload?.success;
+                state.updateSuccess= action.payload?.success;
                 state.message = action.payload?.message;
 
 
@@ -330,5 +335,5 @@ const userSlice = createSlice({
     }
 })
 
-export const { removeErrors, removeSuccess, clearStatus } = userSlice.actions;
+export const { removeErrors, removeSuccess, clearStatus,removeupdateSuccess } = userSlice.actions;
 export default userSlice.reducer;

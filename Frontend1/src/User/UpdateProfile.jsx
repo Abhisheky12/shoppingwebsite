@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar"
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeErrors, removeSuccess, updateProfile } from '../features/user/userSlice';
+import { removeErrors, removeSuccess, removeupdateSuccess, updateProfile } from '../features/user/userSlice';
 import Loader from '../components/loader';
 
 const UpdateProfile = () => {
@@ -14,7 +14,7 @@ const UpdateProfile = () => {
   const [avatarPreview, setAvatarPreview] = useState("./images/profile.jpeg");
 
 
-  const { user, error, success, message, loading } = useSelector((state) => state.user);
+  const { user, error, updateSuccess, message, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -45,12 +45,12 @@ const UpdateProfile = () => {
       toast.error(error, { autoClose: 1000 });
       dispatch(removeErrors());
     }
-    if (success) {
+    if (updateSuccess) {
       toast.success("Profile updated successfully", { autoClose: 1000 });
-      dispatch(removeSuccess());
+      dispatch(removeupdateSuccess());
       navigate("/profile");
     }
-  }, [error, dispatch, success]);
+  }, [error, dispatch, updateSuccess]);
 
    //popup data 
    useEffect(()=>{

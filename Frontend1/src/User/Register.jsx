@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import { register, removeErrors, removeSuccess } from '../features/user/userSlice';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 
 
@@ -12,6 +13,8 @@ const Register = () => {
         email: "",
         password: ""
     })
+
+    const [showPassword, setShowPassword] = useState(false);
 
     // for Send image data to backend
     const [avatar, setAvatar] = useState("");
@@ -77,16 +80,18 @@ const Register = () => {
 
 
     return (
-        <div className="mx-auto flex items-center justify-center min-h-screen p-4">
+        <div className="min-h-screen flex items-center justify-center p-4 
+        bg-gradient-to-br from-indigo-100 via-blue-50 to-purple-100">
 
-            {/* The card-like content area for the form */}
-            <div className="bg-white p-8 sm:p-10 rounded-xl shadow-lg w-full max-w-md">
+            {/* Card container */}
+            <div className="bg-gradient-to-br from-white via-gray-50 to-gray-100 
+            p-8 sm:p-10 rounded-2xl shadow-2xl w-full max-w-md border border-gray-200">
 
-                {/* The form element itself */}
                 <form className="space-y-6" onSubmit={registerSubmit} encType="multipart/form-data">
 
-                    {/* Form Header */}
-                    <h2 className="text-3xl font-bold text-center text-gray-800">Sign Up</h2>
+                    <h2 className="text-4xl font-extrabold text-center bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                        Sign Up
+                    </h2>
 
                     {/* Username Input */}
                     <div>
@@ -94,7 +99,9 @@ const Register = () => {
                             type="text"
                             placeholder='Username'
                             name="name"
-                            className="appearance-none rounded-md relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            className="rounded-md block w-full px-4 py-3 border border-gray-300 
+                        placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 
+                        focus:border-indigo-500 sm:text-sm"
                             value={name}
                             onChange={registerDataChange}
                         />
@@ -106,34 +113,45 @@ const Register = () => {
                             type="email"
                             placeholder='Email'
                             name="email"
-                            className="appearance-none rounded-md relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            className="rounded-md block w-full px-4 py-3 border border-gray-300 
+                        placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 
+                        focus:border-indigo-500 sm:text-sm"
                             value={email}
                             onChange={registerDataChange}
                         />
                     </div>
 
                     {/* Password Input */}
-                    <div>
+                    <div className="relative">
                         <input
-                            type="password"
-                            placeholder='Password'
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Password"
                             name="password"
-                            className="appearance-none rounded-md relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            className="rounded-md block w-full px-4 py-3 border border-gray-300 
+                        placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 
+                        focus:border-indigo-500 sm:text-sm pr-10"
                             value={password}
                             onChange={registerDataChange}
                         />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 hover:text-gray-700"
+                        >
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </button>
                     </div>
 
-                    {/* Avatar Upload Section */}
+                    {/* Avatar Upload */}
                     <div className="flex items-center space-x-4">
-                        {/* Avatar Preview Image */}
                         <img
                             src={avatarPreview}
                             alt="Avatar Preview"
-                            className="w-16 h-16 rounded-full object-cover bg-gray-200"
+                            className="w-16 h-16 rounded-full object-cover border border-gray-300 shadow-sm"
                         />
-                        {/* Custom-styled file input button */}
-                        <label htmlFor="avatar-upload" className="cursor-pointer bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <label htmlFor="avatar-upload" className="cursor-pointer bg-white py-2 px-4 border border-gray-300 
+                        rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none 
+                        focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Upload Photo
                         </label>
                         <input
@@ -146,29 +164,27 @@ const Register = () => {
                         />
                     </div>
 
-                    {/* Form submission button */}
+                    {/* Submit Button */}
                     <div>
                         <button
                             type="submit"
                             disabled={loading}
                             className={`group relative w-full flex justify-center py-3 px-4 border border-transparent 
-                               text-sm font-medium rounded-md text-white 
-                              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
-                             ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"}`}
+                            text-sm font-medium rounded-md text-white 
+                            focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                            ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"}`}
                         >
                             {loading ? "Creating... Account" : "Create Account"}
                         </button>
-
                     </div>
 
-                    {/* Link to Sign In page */}
+                    {/* Sign In Link */}
                     <p className='text-sm text-center text-gray-600'>
                         Already have an account?{' '}
                         <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
                             Sign in here
                         </Link>
                     </p>
-
                 </form>
             </div>
         </div>

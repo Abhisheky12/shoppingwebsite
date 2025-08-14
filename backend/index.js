@@ -1,10 +1,14 @@
 const express = require("express");
 const app = express();
+const dotenv=require("dotenv");
 const mongoose = require("mongoose");
-const { main } = require("./config/db")
-require("dotenv").config();
-// const cors = require("cors");
+const { main } = require("./config/db");
+const path = require("path");
 const cookieParser = require("cookie-parser");
+
+if(process.env.NODE_ENV!="PRODUCTION"){
+dotenv.config();
+}
 
 
 
@@ -18,29 +22,7 @@ cloudinary.config({
 })
 
 
-
-
-//importing route
-const authRouter=require("./route/userRoute");
-const productRouter=require("./route/productRoute");
-const orderRouter=require("./route/orderRoute");
-const paymentrouter=require("./route/paymentRoutes");
-
-
-//running frontend and backend on sameport
-// app.use(
-//     cors({
-//         origin: "http://localhost:5173",
-//         methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-//         allowedHeaders: ["Content-Type", "Authorization", "Cache-Control", "Expires", "Pragma"],
-//         credentials: true,
-//     })
-// );
-
-
-
 //middleware
-
 app.use(cookieParser());  // parse cookies from the incoming HTTP requests, and make them easily accessible via req.cookies.
 app.use(express.json()); // Parses incoming JSON request bodies and makes them available as req.body.
 app.use(fileUpload({
@@ -49,11 +31,31 @@ app.use(fileUpload({
 }));
 app.use(express.urlencoded({extended: true })); // For parsing application/x-www-form-urlencoded
 
-//routes
+
+
+
+
+
+// importing route
+const authRouter=require("./route/userRoute");
+const productRouter=require("./route/productRoute");
+const orderRouter=require("./route/orderRoute");
+const paymentrouter=require("./route/paymentRoutes");
+
+// routes
 app.use("/api/v1",authRouter);
 app.use("/api/v1",productRouter);
 app.use("/api/v1",orderRouter);
 app.use("/api/v1",paymentrouter);
+
+
+//serve static files
+app.use(express.static(path.join(__dirname,"../Frontend1/dist")))
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../Frontend1/dist/index.html"));
+});
+
+
 
 
 

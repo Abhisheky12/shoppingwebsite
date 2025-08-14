@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { removeErrors, removeSuccess, updatePassword } from '../features/user/userSlice';
+import { removeErrors, removeSuccess, removeupdateSuccess, updatePassword } from '../features/user/userSlice';
 import { toast } from 'react-toastify';
 import Navbar from '../components/Navbar';
 import Loader from '../components/loader';
@@ -10,7 +10,7 @@ const UpdatePassword = () => {
 
 
 
-  const {success,loading,error}=useSelector((state=>state.user));
+  const {updateSuccess,loading,error}=useSelector((state=>state.user));
   const dispatch=useDispatch();
   const navigate=useNavigate();
 
@@ -37,12 +37,12 @@ const UpdatePassword = () => {
         toast.error(error, { autoClose: 1000 });
         dispatch(removeErrors());
       }
-      if (success) {
+      if (updateSuccess) {
         toast.success("Password updated successfully", { autoClose: 1000 });
-        dispatch(removeSuccess());
+        dispatch(removeupdateSuccess());
         navigate("/profile");
       }
-    }, [error, dispatch, success]);
+    }, [error, dispatch, updateSuccess]);
   
   return (
     <div>
