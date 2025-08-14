@@ -3,13 +3,13 @@ import PageTitle from '../components/PageTitle'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { useDispatch, useSelector } from 'react-redux'
-import Product from '../components/product'
 import { getProduct, removeErrors } from '../features/products/productSlice'
 import { toast } from 'react-toastify'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import Noproduct from '../components/Noproduct'
 import Pagination from '@mui/material/Pagination'
 import Loader from '../components/loader';
+import Product from '../components/Product'
 
 const Products = () => {
     const { loading, error, products, resultsPerPage, productCount } = useSelector((state) => state.product);
