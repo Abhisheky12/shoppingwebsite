@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { Close, Menu, PersonAdd, Search, ShoppingCart } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import UserDashboard from '../User/userDashboard';
+import UserDashboard from '../User/UserDashboard';
 import { loadUser } from '../features/user/userSlice';
 
 const Navbar = () => {
