@@ -2,7 +2,6 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import PageTitle from '../components/PageTitle';
 import Footer from '../components/Footer';
-import CartItem from './CartItem';
 import { useSelector } from 'react-redux';
 import CartEmpty from './Cartempty';
 import { useNavigate } from 'react-router-dom';
