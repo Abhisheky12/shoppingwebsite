@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 import ImageSlider from '../components/ImageSlider';
-import Product from '../components/product';
+import Product from '../components/Product';
 import PageTitle from '../components/PageTitle';
 import { useSelector, useDispatch } from "react-redux";
 import { getProduct, removeErrors } from '../features/products/productSlice';
-import Loader from '../components/loader';
+import Loader from '../components/Loader';
 import {toast} from "react-toastify";
 
 const Home = () => {
