@@ -6,7 +6,7 @@ import Product from '../components/Product';
 import PageTitle from '../components/PageTitle';
 import { useSelector, useDispatch } from "react-redux";
 import { getProduct, removeErrors } from '../features/products/productSlice';
-import Loader from '../components/Loader';
+import Loader from '../components/loader';
 import {toast} from "react-toastify";
 
 const Home = () => {

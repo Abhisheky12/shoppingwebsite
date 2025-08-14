@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getAllMyOrders } from '../features/order/orderSlice';
 import { removeErrors } from '../features/user/userSlice';
-import Loader from '../components/Loader';
+import Loader from '../components/loader';
 
 
 

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { forgotPassword, removeErrors, removeSuccess } from '../features/user/userSlice';
 import { toast } from 'react-toastify';
-import Loader from '../components/Loader';
+import Loader from '../components/loader';
 
 const ForgotPassword = () => {
 
