@@ -251,7 +251,7 @@ const adminSlice = createSlice({
             })
             .addCase(updateProducts.fulfilled, (state, action) => {
                 state.loading = false;
-                state.success = action.payload.success;
+                state.updateSuccess = action.payload.success;
                 state.product = action.payload.product;
 
             })

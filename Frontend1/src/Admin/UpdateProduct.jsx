@@ -25,7 +25,7 @@ const UpdateProduct = () => {
     const { updateId } = useParams();
     const categories = ["GLASS", "SHIRT", "MOBILE", "DRESS", "TV", "RING", "SHOES", "WATCH", "BAG", "PANT", "T-SHIRT"];
     const { product } = useSelector((state) => state.product);
-    const { loading, error, success } = useSelector((state) => state.admin);
+    const { loading, error,updateSuccess } = useSelector((state) => state.admin);
     const dispatch = useDispatch();
 
 
@@ -80,11 +80,11 @@ const UpdateProduct = () => {
             toast.error(error, { autoClose: 1000 });
             dispatch(removeErrors());
         }
-        if (success) {
+        if (updateSuccess) {
             toast.success("Product updated successfully", { autoClose: 1000 });
             dispatch(removeSuccess());
         }
-    }, [error, dispatch, success]);
+    }, [error, dispatch, updateSuccess]);
 
     return (
         <>
