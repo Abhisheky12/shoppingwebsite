@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createProducts, removeCreatesuccess, removeErrors, removeSuccess } from '../features/admin/adminSlice';
 import { toast } from 'react-toastify';
 
-const CreateProduct = () => {
+const CreateProduct =() => {
     const [name, setProductName] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
