@@ -23,7 +23,7 @@ const Products = () => {
     const pageFromURL = parseInt(searchParams.get("page"), 10) || 1;
     const [currentPage, setCurrentPage] = useState(pageFromURL);
     //category filter
-    const categories = ["LAPTOP", "MOBILE", "TV", "FRUITS", "GLASS"];
+    const categories = ["SHIRT", "MOBILE", "TV", "RING", "SHOES", "WATCH", "BAG", "PANT", "T-SHIRT","Fruits"];
     const category = searchParams.get("category");
 
 
