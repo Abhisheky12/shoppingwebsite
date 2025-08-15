@@ -1,4 +1,4 @@
-# 🛍️ ShopEasy - MERN E-Commerce Platform
+# 🛍️ ShopEasy - MERN Website
 
 An **end-to-end full-stack E-Commerce application** built with the **MERN stack (MongoDB, Express, React, Node.js)**.  
 It offers a seamless shopping experience with product browsing, cart management, secure payments, and a powerful **Admin Dashboard** for managing products, orders, and users.
