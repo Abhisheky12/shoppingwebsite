@@ -11,12 +11,13 @@ It offers a seamless shopping experience with product browsing, cart management,
 
 ### 👤 User Side
 - **Authentication:** Secure SignUp & Login using **JWT**.
+-  **Profile Management:** Edit user profile information.
+- **Password Management:** Update or reset password securely.
 - **Product Browsing:** View and search for products with detailed information.
 - **Shopping Cart:** Add, remove, and update cart items.
 - **Secure Checkout:** Integrated payment processing.
 - **Order History:** Track personal orders and status.
-- **Profile Management:** Edit user profile information.
-- **Password Management:** Update or reset password securely.
+
 
 ### 🛠️ Admin Panel
 - **Dashboard:** Manage store operations from one place.
