@@ -15,6 +15,8 @@ It offers a seamless shopping experience with product browsing, cart management,
 - **Shopping Cart:** Add, remove, and update cart items.
 - **Secure Checkout:** Integrated payment processing.
 - **Order History:** Track personal orders and status.
+- **Profile Management:** Edit user profile information.
+- **Password Management:** Update or reset password securely.
 
 ### 🛠️ Admin Panel
 - **Dashboard:** Manage store operations from one place.
