@@ -59,7 +59,7 @@ Password: 1234567890
 ## 🚀 Getting Started Locally
 
 ### 📦 Backend Setup
-```bash
+
 # 1. Navigate to backend folder
 cd backend
 
@@ -75,6 +75,7 @@ touch .env
 # 4. Start development server
 npm run dev
 
+### 📦 Frontend Setup
 
 # 1. Navigate to frontend folder
 cd Frontend1
@@ -89,7 +90,9 @@ touch .env
 
 # 4. Start development server
 npm run dev
-
+---
+### 📦 Folder Structure
+```bash
 /
 ├── backend/
 │   ├── config/
