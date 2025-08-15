@@ -16,7 +16,7 @@ const UpdateRole = () => {
     const [email, setEmail] = useState('');
     const [role, setRole] = useState('');
 
-    const { user, success, loading, error } = useSelector((state) => state.admin);
+    const { user, updateSuccess, loading, error } = useSelector((state) => state.admin);
     
 
     const navigate=useNavigate();
@@ -51,12 +51,12 @@ const UpdateRole = () => {
                 toast.error(error, { autoClose: 1000 });
                 dispatch(removeErrors());
             }
-            if (success) {
+            if (updateSuccess) {
                 toast.success("User role updated successfully", { autoClose: 1000 });
                 dispatch(removeSuccess());
                 navigate("/admin/getallusers")
             }
-        }, [error, dispatch, success]);
+        }, [error, dispatch, updateSuccess]);
 
     return (
         <>

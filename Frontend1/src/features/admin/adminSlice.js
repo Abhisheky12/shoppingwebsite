@@ -196,6 +196,7 @@ const adminSlice = createSlice({
         },
         removeSuccess: (state) => {
             state.success = null;
+            state.updateSuccess=null;
         },
         removeDelete: (state) => {
             state.deleteError = null;
@@ -315,7 +316,7 @@ const adminSlice = createSlice({
             })
             .addCase(updateRole.fulfilled, (state, action) => {
                 state.loading = false;
-                state.success = action.payload.success
+                state.updateSuccess = action.payload.success
             })
             .addCase(updateRole.rejected, (state, action) => {
                 state.loading = false;
