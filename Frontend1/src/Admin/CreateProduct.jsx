@@ -15,7 +15,7 @@ const CreateProduct = () => {
     const [imagePreviews, setImagePreviews] = useState([]);
 
     const categories = ["GLASS", "SHIRT", "MOBILE", "DRESS", "TV", "RING", "SHOES", "WATCH", "BAG", "PANT", "T-SHIRT"];
-    const {  createsuccess, loading, error } = useSelector((state) => state.admin);
+    const { createsuccess, loading, error } = useSelector((state) => state.admin);
     const dispatch = useDispatch();
 
 
@@ -50,7 +50,7 @@ const CreateProduct = () => {
             toast.error(error, { autoClose: 1000 });
             dispatch(removeErrors());
         }
-        if ( createsuccess) {
+        if (createsuccess) {
             toast.success("Product created successfully", { autoClose: 1000 });
             dispatch(removeCreatesuccess());
             setProductName("");
