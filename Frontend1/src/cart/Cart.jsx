@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import CartItems from './CartItem';
 
 const Cart = () => {
 
@@ -57,7 +58,7 @@ const Cart = () => {
 
                                     {/* ---  Cart Item --- */}
                                     {
-                                        cartItems ? cartItems.map((item, index) => <CartItem item={item} />) : ""
+                                        cartItems ? cartItems.map((item, index) => <CartItems item={item} />) : ""
                                     }
                                     {/* --- End Cart Item --- */}
 
