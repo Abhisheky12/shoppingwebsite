@@ -56,8 +56,8 @@ const Navbar = () => {
                     <ul className="flex flex-col md:flex-row gap-4 md:gap-10">
                         <li><Link to="/" className="text-gray-200 font-medium hover:text-blue-400">Home</Link></li>
                         <li><Link to="/products" className="text-gray-200 font-medium hover:text-blue-400">Products</Link></li>
-                        <li><Link to="/about-us" className="text-gray-200 font-medium hover:text-blue-400">About Us</Link></li>
-                        <li><Link to="/contact-us" className="text-gray-200 font-medium hover:text-blue-400">Contact Us</Link></li>
+                        <li><Link to="/aboutus" className="text-gray-200 font-medium hover:text-blue-400">About Us</Link></li>
+                        <li><Link to="/contactus" className="text-gray-200 font-medium hover:text-blue-400">Contact Us</Link></li>
                     </ul>
                 </div>
 

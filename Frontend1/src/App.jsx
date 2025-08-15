@@ -30,6 +30,8 @@ import OrderList from './Admin/OrderList';
 import UpdateOrder from './Admin/UpdateOrder';
 import ReviewList from './Admin/ReviewList';
 import SingleProductReview from './Admin/SingleProductReview';
+import AboutUs from './pages/AboutUs';
+import ContactUs from './pages/ContactUs';
 
 
 
@@ -54,6 +56,8 @@ const App = () => {
         <Route path="/products" element={<Products/>} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+         <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/contactus" element={<ContactUs />} />
         <Route path="/profile" element={<ProtectedRoute element={<Profile />} />} />
         <Route path="/updateprofile" element={<ProtectedRoute element={<UpdateProfile />} />} />
         <Route path="/updatepassword" element={<ProtectedRoute element={<UpdatePassword />} />} />
