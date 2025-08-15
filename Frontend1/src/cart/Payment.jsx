@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5173';
 
 const Payment = () => {
   const navigate = useNavigate();
@@ -15,10 +16,10 @@ const Payment = () => {
 
  const completePayment = async (amount) => {
     try {
-        const { data: keyData } = await axios.get("/api/v1/getKey");
+        const { data: keyData } = await axios.get(`${BASE_URL}/api/v1/getKey`);
         const { key } = keyData;
 
-        const { data: orderData } = await axios.post("/api/v1/payment/process", { amount });
+        const { data: orderData } = await axios.post(`${BASE_URL}/api/v1/payment/process`, { amount });
         const { order } = orderData;
 
         // --- CORRECTED OPTIONS OBJECT ---
@@ -31,7 +32,7 @@ const Payment = () => {
             order_id: order.id,
             handler: async function (response) {
                 try {
-                    const { data } = await axios.post("/api/v1/paymentVerification", {
+                    const { data } = await axios.post(`${BASE_URL}/api/v1/paymentVerification`, {
                         razorpay_payment_id: response.razorpay_payment_id,
                         razorpay_order_id: response.razorpay_order_id,
                         razorpay_signature: response.razorpay_signature,
