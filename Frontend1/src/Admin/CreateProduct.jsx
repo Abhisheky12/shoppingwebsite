@@ -14,7 +14,7 @@ const CreateProduct = () => {
     const [images, setImages] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
 
-    const categories = ["GLASS", "SHIRT", "MOBILE", "DRESS", "TV", "RING", "SHOES", "WATCH", "BAG", "PANT", "T-SHIRT"];
+    const categories =["SHIRT", "MOBILE", "TV", "RING", "SHOES", "WATCH", "BAG", "PANT", "T-SHIRT","Fruits"];
     const { createsuccess, loading, error } = useSelector((state) => state.admin);
     const dispatch = useDispatch();
 
