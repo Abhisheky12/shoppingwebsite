@@ -52,6 +52,8 @@ Password: 1234567890
 - **jsonwebtoken (JWT)** – Token authentication.
 - **bcrypt.js** – Password hashing.
 - **dotenv** – Environment variables.
+- **express-fileupload** – Middleware for handling multipart/form-data file uploads.
+- **Cloudinary** – Cloud service for image and video management.
 
 ### ☁️ Deployment & Database
 - **Render** – Hosting (frontend & backend).
