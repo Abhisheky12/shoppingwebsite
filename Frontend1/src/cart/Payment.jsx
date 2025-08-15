@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5173';
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 const Payment = () => {
   const navigate = useNavigate();
